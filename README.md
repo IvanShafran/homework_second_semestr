@@ -1,2 +1,2 @@
-Homework second semestr. MIPT DIHT 2014.
+Homework second semester. MIPT DIHT 2014.
 =======================
