@@ -5,34 +5,34 @@
 
 #include <vector>
 
-void TestLCSubstring_Simple()
+void TestLCSubstringDistance_Simple()
 {
     if (LCSDistance<std::string>("", "") != 0)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #1");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #1");
 
     if (LCSDistance<std::string>("", "a") != 1)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #2");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #2");
 
     if (LCSDistance<std::string>("a", "") != 1)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #3");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #3");
 
     if (LCSDistance<std::string>("a", "b") != 2)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #4");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #4");
 
     if (LCSDistance<std::string>("a", "a") != 0)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #5");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #5");
 
     if (LCSDistance<std::string>("abacaba", "bab") != 4)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #6");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #6");
 
     if (LCSDistance<std::string>("abacaba", "acab") != 3)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #7");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #7");
 
     if (LCSDistance<std::string>("abbaba", "babba") != 3)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #8");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #8");
 
     if (LCSDistance<std::string>("bababa", "aba") != 3)
-        throw std::runtime_error("Error: TestLCSubstring_Simple #9");
+        throw std::runtime_error("Error: TestLCSubstringDistance_Simple #9");
 }
 
 int VagnerFisher(const std::string& first_string, const std::string& second_string)
@@ -61,7 +61,7 @@ int VagnerFisher(const std::string& first_string, const std::string& second_stri
     return previous_line[second_length];
 }
 
-void TestLCSubstring_Random()
+void TestLCSubstringDistance_Random()
 {
     for (int i = 0; i < 1000; i++)
     {
@@ -72,13 +72,13 @@ void TestLCSubstring_Random()
         std::string second_string = RandString(second_length, symbol_set);
 
         if (LCSDistance(first_string, second_string) != VagnerFisher(first_string, second_string))
-            throw std::runtime_error("Error: TestLCSubstring_Random");
+            throw std::runtime_error("Error: TestLCSubstringDistance_Random");
 
     }
 }
 
-void TestLCSubstring()
+void TestLCSubstringDistance()
 {
-    TestLCSubstring_Simple();
-    TestLCSubstring_Random();
+    TestLCSubstringDistance_Simple();
+    TestLCSubstringDistance_Random();
 }

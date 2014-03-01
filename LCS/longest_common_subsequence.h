@@ -76,10 +76,10 @@ std::vector<size_t> LCSBounds(Iterator first_begin, Iterator first_end,
             x = bounds[diagonal - 1 + shift] + 1;
 
         size_t y = x - diagonal;
-
-        if (x <= first_size && y <= second_size) {
-            int common_prefix_length = CommonPrefixLength(first_sequence.begin() + x, first_sequence.end(),
-                second_sequence.begin() + y, second_sequence.end());
+        
+        if ((first_end - first_begin) >= x && (second_end - second_begin) >= y) {
+            int common_prefix_length = CommonPrefixLength(first_begin + x, first_end,
+                second_begin + y, second_end);
             x += common_prefix_length;
             y += common_prefix_length;
         }
@@ -89,3 +89,22 @@ std::vector<size_t> LCSBounds(Iterator first_begin, Iterator first_end,
 
     return bounds;
 }
+
+/*
+template <class Sequence, class Iterator>
+Sequence LCSubsequence(Iterator first_begin, Iterator first_end, 
+    Iterator first_reverse_begin, Iterator first_reverse_end,
+    Iterator second_begin, Iterator second_end, Iterator second_reverse_begin,
+    Iterator second_reverse_end, int distance)
+{
+
+}
+
+template <class Sequence>
+Sequence LCSubsequence(const Sequence& first_sequence, const Sequence& second_sequence)
+{
+    int distance = LCSDistance(first_sequence, second_sequence);
+    
+    return LCSubsequence();
+}
+*/

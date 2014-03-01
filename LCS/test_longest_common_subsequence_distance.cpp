@@ -31,7 +31,7 @@ int VagnerFisher(const std::vector<int>& first_vector, const std::vector<int>& s
     return previous_line[second_size];
 }
 
-void TestLCSubsequence_Random()
+void TestLCSubsequenceDistance_Random()
 {
     for (int i = 0; i < 1000; i++)
     {
@@ -42,12 +42,12 @@ void TestLCSubsequence_Random()
         std::vector<int> second_vector = RandVector(second_size, element_set);
 
         if (LCSDistance(first_vector, second_vector) != VagnerFisher(first_vector, second_vector))
-            throw std::runtime_error("Error: TestLCSubsequence_Random");
+            throw std::runtime_error("Error: TestLCSubsequenceDistance_Random");
 
     }
 }
 
-void TestLCSubsequence()
+void TestLCSubsequenceDistance()
 {
-    TestLCSubsequence_Random();
+    TestLCSubsequenceDistance_Random();
 }
