@@ -2,13 +2,15 @@
 #include "test_longest_common_substring_distance.h"
 #include "test_longest_common_subsequence_distance.h"
 #include "test_common_prefix_length.h"
+#include "test_lcs_get_subsequense.h"
 
 int main()
 {
     try {
-        TestCommonPrefixLength();
-        TestLCSubstringDistance();
-        TestLCSubsequenceDistance();
+        //TestCommonPrefixLength();
+        //TestLCSubstringDistance();
+        //TestLCSubsequenceDistance();
+        TestLCSGetSubsequence();
         system("PAUSE");
         return 0;
     }

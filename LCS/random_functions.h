@@ -20,7 +20,7 @@ inline std::string RandString(int length, const std::string& symbol_set)
 
     std::string result;
     result.resize(length);
-    for (size_t i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
         result[i] = symbol_set[Rand(0, symbol_set.length())];
 
     return result;
