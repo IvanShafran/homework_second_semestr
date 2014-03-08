@@ -22,10 +22,28 @@ class SignedArray{
         signed_array_ = array_ - left_bound;
     }
 
+    void Initialize(SignedArray<T>& signed_array)
+    {
+        reverse_ = signed_array.reverse_;
+        shift_ = signed_array.shift_;
+        left_bound_ = signed_array.left_bound_;
+        right_bound_ = signed_array.right_bound_;
+        size_ = right_bound_ - left_bound_ + 1;
+
+        array_ = new T[size_];
+        signed_array_ = array_ - left_bound_;
+    }
+
     void InitialazeData(T init_value)
     {
         for (int i = left_bound_; i <= right_bound_; i++)
             signed_array_[i] = init_value;
+    }
+
+    void InitialazeData(SignedArray<T>& signed_array)
+    {
+        for (int i = left_bound_; i <= right_bound_; i++)
+            signed_array_[i] = signed_array[i];
     }
 
     int GetIndex(int index)
@@ -50,7 +68,19 @@ public:
         Initialize(left_bound, right_bound);
         InitialazeData(init_value);
     }
-
+    
+    SignedArray(SignedArray<T>& signed_array)
+    {
+        
+        Initialize(signed_array);
+        InitialazeData(signed_array);
+    }
+    
+    ~SignedArray()
+    {
+        delete [] array_;
+    }
+    
     int GetLeftBound()
     {
         return left_bound_;
@@ -64,9 +94,10 @@ public:
     void Reverse()
     {
         reverse_ = -reverse_;
-        int tmp = -left_bound_;
-        left_bound_ = -right_bound_;
-        right_bound_ = tmp;
+        shift_ *= reverse_;
+        std::swap(left_bound_, right_bound_);
+        left_bound_ *= -1;
+        right_bound_ *= -1;
     }
 
     void Shift(int shift)

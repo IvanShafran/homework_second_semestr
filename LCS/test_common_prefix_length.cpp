@@ -1,5 +1,3 @@
-#pragma once
-
 #include "random_functions.h"
 #include "longest_common_subsequence.h"
 
