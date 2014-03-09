@@ -69,8 +69,10 @@ void TestLCSubstringDistance_Random()
         std::string  symbol_set = "abcdefgh";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
+        int result = LCSDistance(first_string, second_string);
+        int answer = VagnerFisher(first_string, second_string);
 
-        if (LCSDistance(first_string, second_string) != VagnerFisher(first_string, second_string))
+        if (result != answer)
             throw std::runtime_error("Error: TestLCSubstringDistance_Random");
 
     }

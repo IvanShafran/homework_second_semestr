@@ -55,7 +55,7 @@ int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
     if ((first_sequence.size() == 0) || (second_sequence.size() == 0))
         return std::max(first_sequence.size(), second_sequence.size());
 
-    size_t first_size = first_sequence.size(), second_size = second_sequence.size();
+    int first_size = first_sequence.size(), second_size = second_sequence.size();
     int total_size = first_size + second_size;
 
     SignedArray<int> bounds(-total_size, total_size);
@@ -100,7 +100,7 @@ void AddFromTo(const Sequence& increament, Sequence& result)
 {
     int result_size = result.size();
     result.resize(result_size + increament.size());
-    for (int i = 0; i < increament.size(); i++)
+    for (size_t i = 0; i < increament.size(); i++)
         result[i + result_size] = increament[i];
 }
 

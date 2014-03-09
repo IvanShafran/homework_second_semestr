@@ -4,34 +4,24 @@
 
 template <class T>
 class SignedArray{
-    size_t size_;
     int left_bound_, right_bound_;
-    int reverse_, shift_;
-    T* array_;
-    T* signed_array_;
+    int shift_;
+    std::vector<T> array_;
 
     void Initialize(int left_bound, int right_bound)
     {
-        reverse_ = 1;
-        shift_ = 0;
+        shift_ = left_bound;
         left_bound_ = left_bound;
         right_bound_ = right_bound;
-        size_ = right_bound - left_bound + 1;
-
-        array_ = new T[size_];
-        signed_array_ = array_ - left_bound;
+        array_.resize(right_bound - left_bound + 1);
     }
 
     void Initialize(SignedArray<T>& signed_array)
     {
-        reverse_ = signed_array.reverse_;
         shift_ = signed_array.shift_;
         left_bound_ = signed_array.left_bound_;
         right_bound_ = signed_array.right_bound_;
-        size_ = right_bound_ - left_bound_ + 1;
-
-        array_ = new T[size_];
-        signed_array_ = array_ - left_bound_;
+        array_ = signed_array.array_;
     }
 
     void InitialazeData(T init_value)
@@ -40,15 +30,9 @@ class SignedArray{
             signed_array_[i] = init_value;
     }
 
-    void InitialazeData(SignedArray<T>& signed_array)
-    {
-        for (int i = left_bound_; i <= right_bound_; i++)
-            signed_array_[i] = signed_array[i];
-    }
-
     int GetIndex(int index)
     {
-        return (index - shift_) * reverse_;
+        return index - shift_;
     }
 
 public:
@@ -73,12 +57,6 @@ public:
     {
         
         Initialize(signed_array);
-        InitialazeData(signed_array);
-    }
-    
-    ~SignedArray()
-    {
-        delete [] array_;
     }
     
     int GetLeftBound()
@@ -91,13 +69,14 @@ public:
         return right_bound_;
     }
 
+    size_t Size()
+    {
+        return array_.size();
+    }
+
     void Reverse()
     {
-        reverse_ = -reverse_;
-        shift_ *= reverse_;
-        std::swap(left_bound_, right_bound_);
-        left_bound_ *= -1;
-        right_bound_ *= -1;
+        std::reverse(array_.begin(), array_.end());
     }
 
     void Shift(int shift)
@@ -110,12 +89,14 @@ public:
     T& operator [] (int index) {
         if (index < left_bound_ || index > right_bound_)
             throw std::range_error("SignedArray: index not in [left_bound, right_bound]");
-        return signed_array_[GetIndex(index)];
+
+        return array_[GetIndex(index)];
     }   
 
     T operator [] (int index) const {
         if (index < left_bound_ || index > right_bound_)
             throw std::range_error("SignedArray: index not in [left_bound, right_bound]");
-        return signed_array_[GetIndex(index)];
+
+        return array_[GetIndex(index)];
     }
 };

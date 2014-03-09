@@ -34,7 +34,7 @@ void TestLCSGetSubstring_Simple()
 bool CheckSubsequence(std::string& string, std::string& substring)
 {
     int position = 0;
-    for (int i = 0; i < string.size(); i++)
+    for (size_t i = 0; i < string.size(); i++)
     if (position != substring.size() && string[i] == substring[position])
         position++;
 
@@ -61,9 +61,9 @@ bool Check(std::string& first_string, std::string& second_string, std::string su
 void TestLCSGetSubstring_Random()
 {
     srand(777);
-    for (int count = 0; count < 100000; count++) {
-        int first_length = Rand(0, 100);
-        int second_length = Rand(0, 100);
+    for (int count = 0; count < 1000; count++) {
+        int first_length = Rand(0, 1001);
+        int second_length = Rand(0, 1001);
         std::string symbol_set = "abcdefghijklmnopqrstuvwxyz";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
@@ -80,7 +80,8 @@ void TestLCSGetSubstring_BigTest()
     for (int count = 0; count < 5; count++) {
         int first_length = 10000;
         int second_length = 10000;
-        std::string symbol_set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ";
+        std::string symbol_set = 
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
         std::string result = LCSGetSubsequence<std::string>(first_string, second_string);
@@ -94,5 +95,5 @@ void TestLCSGetSubstring()
 {
     TestLCSGetSubstring_Simple();
     TestLCSGetSubstring_Random();
-    TestLCSGetSubstring_BigTest();
+    //TestLCSGetSubstring_BigTest();
 }
