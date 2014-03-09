@@ -3,14 +3,17 @@
 #include "test_longest_common_subsequence_distance.h"
 #include "test_common_prefix_length.h"
 #include "test_lcs_get_substring.h"
+#include "test_signed_array.h"
 
 int main()
 {
     try {
+
         //TestCommonPrefixLength();
+        TestSignedArray();
         //TestLCSubstringDistance();
         //TestLCSubsequenceDistance();
-        TestLCSGetSubstring();
+        //TestLCSGetSubstring();
         system("PAUSE");
         return 0;
     }

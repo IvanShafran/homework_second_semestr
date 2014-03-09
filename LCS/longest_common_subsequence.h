@@ -20,6 +20,35 @@ int CommonPrefixLength(Iterator first_begin, Iterator first_end,
     return length;
 }
 
+template <class Iterator>
+std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
+    Iterator first_begin, Iterator first_end, 
+    Iterator second_begin, Iterator second_end)
+{
+    int first_size = first_end - first_begin;
+    int second_size = second_end - second_begin;
+
+    int x;
+    if (diagonal == -bound || (diagonal != bound
+        && bounds[diagonal - 1] < bounds[diagonal + 1]))
+        x = bounds[diagonal + 1];
+    else
+        x = bounds[diagonal - 1] + 1;
+
+    int y = x - diagonal;
+
+    if (first_size >= x && second_size >= y) {
+        int common_prefix_length = CommonPrefixLength(first_begin + x, first_end,
+            second_begin + y, second_end);
+        x += common_prefix_length;
+        y += common_prefix_length;
+    }
+
+    bounds[diagonal] = x;
+
+    return std::pair<int, int>(x, y);
+}
+
 template <class Sequence>
 int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
 {
@@ -34,24 +63,11 @@ int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
 
     for (int bound = 0; bound <= total_size; bound++)
     for (int diagonal = -bound; diagonal <= bound; diagonal += 2) {
-        size_t x;
-        if (diagonal == -bound || (diagonal != bound
-            && bounds[diagonal - 1] < bounds[diagonal + 1]))
-            x = bounds[diagonal + 1];
-        else
-            x = bounds[diagonal - 1] + 1;
+        std::pair<int, int> position = LCSDoStep(bound, diagonal, bounds, 
+            first_sequence.begin(), first_sequence.end(),
+            second_sequence.begin(), second_sequence.end());
 
-        size_t y = x - diagonal;
-
-        if (x <= first_size && y <= second_size) {
-            int common_prefix_length = CommonPrefixLength(first_sequence.begin() + x, first_sequence.end(),
-                second_sequence.begin() + y, second_sequence.end());
-            x += common_prefix_length;
-            y += common_prefix_length;
-        }
-        bounds[diagonal] = x;
-
-        if (x >= first_size && y >= second_size) {
+        if (position.first >= first_size && position.second >= second_size) {
             return bound;
         }
     }
@@ -61,37 +77,22 @@ template <class Iterator>
 SignedArray<int> LCSBounds(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end, int distance)
 {
-    SignedArray<int> bounds(-(distance ), (distance ), 0);
+    SignedArray<int> bounds(-distance, distance);
     
-    if (distance == 0)
-    {
+    if (distance == 0) {
         bounds[0] = CommonPrefixLength(first_begin, first_end, 
             second_begin, second_end);
         return bounds;
     }
 
+    bounds[1] = 0;
+
     for (int bound = 0; bound <= distance; bound++)
-    for (int diagonal = -bound; diagonal <= bound; diagonal += 2) {
-        int x;
-        if (diagonal == -bound || (diagonal != bound
-            && bounds[diagonal - 1] < bounds[diagonal + 1]))
-            x = bounds[diagonal + 1];
-        else
-            x = bounds[diagonal - 1] + 1;
+    for (int diagonal = -bound; diagonal <= bound; diagonal += 2) 
+        LCSDoStep(bound, diagonal, bounds, first_begin, first_end,
+            second_begin, second_end);    
 
-        int y = x - diagonal;
-        
-        if ((first_end - first_begin) >= x && (second_end - second_begin) >= y) {
-            int common_prefix_length = CommonPrefixLength(first_begin + x, first_end,
-                second_begin + y, second_end);
-            x += common_prefix_length;
-            y += common_prefix_length;
-        }
-
-        bounds[diagonal] = x;
-    }
-
-    return std::move(bounds);
+    return bounds;
 }
 
 template<class Sequence>
@@ -118,6 +119,41 @@ void PushCommonSubsequence(Sequence& sequence, Iterator begin, Iterator end)
     }
 }
 
+template <class Iterator>
+std::pair<int, int> LCSGetSeparator(int distance, 
+    Iterator first_begin, Iterator first_end, 
+    Iterator second_begin, Iterator second_end)
+{
+    int bound_distance = (distance + 1) / 2;
+    int first_size = first_end - first_begin;
+    int second_size = second_end - second_begin;
+    std::reverse_iterator<Iterator> first_reverse_begin(first_end),
+        first_reverse_end(first_begin), second_reverse_begin(second_end),
+        second_reverse_end(second_begin);
+
+    SignedArray<int> bounds = LCSBounds(first_begin, first_end,
+        second_begin, second_end, bound_distance);
+    SignedArray<int> reverse_bounds = LCSBounds(first_reverse_begin, first_reverse_end,
+        second_reverse_begin, second_reverse_end, distance - bound_distance);
+
+    reverse_bounds.Reverse();
+    reverse_bounds.Shift(first_size - second_size);
+
+    int first_subsequence_begin, second_subsequence_begin;
+    int min_index = std::max(bounds.GetLeftBound(), reverse_bounds.GetLeftBound());
+    int max_index = std::min(bounds.GetRightBound(), reverse_bounds.GetRightBound());
+    for (int diagonal = min_index; diagonal <= max_index; diagonal++)
+    if ((bounds[diagonal] + reverse_bounds[diagonal]) >= first_size)
+    {
+        first_subsequence_begin = first_size - reverse_bounds[diagonal];
+        second_subsequence_begin = first_subsequence_begin - diagonal;
+        break;
+    }
+
+    return std::pair<int, int>(first_subsequence_begin, second_subsequence_begin);
+}
+
+
 template <class Sequence, class Iterator>
 Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end, 
@@ -131,17 +167,16 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
         return result;
     }
 
-    std::reverse_iterator<Iterator> first_reverse_begin(first_end),
-        first_reverse_end(first_begin), second_reverse_begin(second_end),
-        second_reverse_end(second_begin);
-
     if (distance == 0) {
         PushCommonSubsequence(result, first_begin, first_end);
         return result;
     }
 
-    if (distance == 1)
-    {
+    if (distance == 1) {
+        std::reverse_iterator<Iterator> first_reverse_begin(first_end),
+            first_reverse_end(first_begin), second_reverse_begin(second_end),
+            second_reverse_end(second_begin);
+
         int begin_common_sequence = CommonPrefixLength(first_begin, first_end,
             second_begin, second_end);
         int end_common_sequence = CommonPrefixLength(first_reverse_begin, 
@@ -154,31 +189,15 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
         return result;
     }
     
-    int bound_distance = (distance + 1) / 2;
-    SignedArray<int> bounds = LCSBounds(first_begin, first_end, 
-        second_begin, second_end, bound_distance);
-    SignedArray<int> reverse_bounds = LCSBounds(first_reverse_begin, first_reverse_end,
-        second_reverse_begin, second_reverse_end, distance - bound_distance);
+    int bound_distance = (distance + 1) / 2;    
+    std::pair<int, int> separator = LCSGetSeparator(distance, first_begin, first_end, 
+        second_begin, second_end);
 
-    reverse_bounds.Reverse();
-    reverse_bounds.Shift(first_size - second_size);
+    Sequence begin_part = LCSGetSubsequence<Sequence>(first_begin, first_begin + separator.first,
+        second_begin, second_begin + separator.second, bound_distance);
 
-    int first_subsequence_begin, second_subsequence_begin;
-    for (int diagonal = std::max(bounds.GetLeftBound(), reverse_bounds.GetLeftBound()); 
-        diagonal <= std::min(bounds.GetRightBound(), reverse_bounds.GetRightBound()); 
-        diagonal++)
-    if ((bounds[diagonal] + reverse_bounds[diagonal]) >= first_size)
-    {
-        first_subsequence_begin = first_size - reverse_bounds[diagonal];
-        second_subsequence_begin = first_subsequence_begin - diagonal;
-        break;
-    }    
-
-    Sequence begin_part = LCSGetSubsequence<Sequence>(first_begin, first_begin + first_subsequence_begin,        
-        second_begin, second_begin + second_subsequence_begin, bound_distance);
-
-    Sequence end_part = LCSGetSubsequence<Sequence>(first_begin + first_subsequence_begin, first_end,        
-        second_begin + second_subsequence_begin, second_end, distance - bound_distance);
+    Sequence end_part = LCSGetSubsequence<Sequence>(first_begin + separator.first, first_end,
+        second_begin + separator.second, second_end, distance - bound_distance);
 
     AddFromTo(begin_part, result);
     AddFromTo(end_part, result);
