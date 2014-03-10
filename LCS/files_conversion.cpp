@@ -97,6 +97,8 @@ void FilesConverison()
         common_subsequence, get_string);
 }
 
+/*\/ \/ \/ TESTING \/ \/ \/*/
+
 template <class Iterator>
 bool equal_sequence(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end)
@@ -199,12 +201,13 @@ void TestFiles—onversionSimilarFiles(int count_iterations, int max_file_size,
 
 void TestFiles—onversion()
 {
-    TestFiles—onversion(10000, 0, 10, 0, 2, "ab", "TestFiles—onversion Small Size of File Test, Short lines");
-    TestFiles—onversion(1000, 500, 1000, 0, 2, "ab", "TestFiles—onversion Medium Size of File Test, Short lines");
-    TestFiles—onversion(50, 5000, 10000, 0, 2, "ab", "TestFiles—onversion Big Size of File Test, Short lines");
-    TestFiles—onversion(1, 50000, 100000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
-    TestFiles—onversion(100, 500, 1000, 50, 100, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
-    TestFiles—onversion(100, 500, 1000, 999, 1000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
+    TestFiles—onversion(1000, 0, 10, 0, 2, "ab", "TestFiles—onversion Small Size of File Test, Short lines");
+    TestFiles—onversion(100, 50, 100, 0, 2, "ab", "TestFiles—onversion Medium Size of File Test, Short lines");
+    TestFiles—onversion(50, 500, 1000, 0, 2, "ab", "TestFiles—onversion Big Size of File Test, Short lines");
+    TestFiles—onversion(1, 5000, 10000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
+    TestFiles—onversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
+    TestFiles—onversion(100, 50, 100, 2500, 5000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
     
-    TestFiles—onversionSimilarFiles(100, 1000, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
+    TestFiles—onversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
+    
 }

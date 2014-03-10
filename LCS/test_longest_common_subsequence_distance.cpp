@@ -32,7 +32,7 @@ int VagnerFisher(const std::vector<int>& first_vector, const std::vector<int>& s
 void TestLCSubsequenceDistance_Random()
 {
     srand(777);
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         int first_size = Rand(1, 1001);
         int second_size = Rand(1, 1001);

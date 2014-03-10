@@ -62,7 +62,7 @@ int VagnerFisher(const std::string& first_string, const std::string& second_stri
 void TestLCSubstringDistance_Random()
 {
     srand(777);
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         int first_length = Rand(1, 1001);
         int second_length = Rand(1, 1001);

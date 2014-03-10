@@ -8,7 +8,6 @@
 int main()
 {
     try {
-
         TestCommonPrefixLength();
         std::cout << "TestCommonPrefixLength OK" << std::endl;
         TestLCSubstringDistance();
@@ -18,7 +17,7 @@ int main()
         TestLCSGetSubstring();
         std::cout << "TestLCSGetSubstring OK" << std::endl;
         TestFilesÑonversion();
-        std::cout << "TestFilesÑonversion OK" << std::endl;
+        std::cout << "TestFilesConversion OK" << std::endl;
         system("PAUSE");
         return 0;
     }

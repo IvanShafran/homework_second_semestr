@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 #include "signed_array.h"
 
@@ -95,30 +96,6 @@ SignedArray<int> LCSBounds(Iterator first_begin, Iterator first_end,
     return bounds;
 }
 
-template<class Sequence>
-void AddFromTo(const Sequence& increament, Sequence& result)
-{
-    int result_size = result.size();
-    result.resize(result_size + increament.size());
-    for (size_t i = 0; i < increament.size(); i++)
-        result[i + result_size] = increament[i];
-}
-
-template <class Sequence, class Iterator>
-void PushCommonSubsequence(Sequence& sequence, Iterator begin, Iterator end)
-{
-    int additive_size = end - begin;
-    if (additive_size <= 0)
-        return;
-    int primary_size = sequence.size();
-    sequence.resize(primary_size + additive_size);
-    int i = primary_size;
-    while (begin != end) {
-        sequence[i++] = *begin;
-        begin++;
-    }
-}
-
 template <class Iterator>
 std::pair<int, int> LCSGetSeparator(int distance, 
     Iterator first_begin, Iterator first_end, 
@@ -153,7 +130,6 @@ std::pair<int, int> LCSGetSeparator(int distance,
     return std::pair<int, int>(first_subsequence_begin, second_subsequence_begin);
 }
 
-
 template <class Sequence, class Iterator>
 Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end, 
@@ -168,7 +144,7 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
     }
 
     if (distance == 0) {
-        PushCommonSubsequence(result, first_begin, first_end);
+        result.insert(result.end(), first_begin, first_end);
         return result;
     }
 
@@ -182,10 +158,8 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
         int end_common_sequence = CommonPrefixLength(first_reverse_begin, 
             first_reverse_end - begin_common_sequence,
             second_reverse_begin, second_reverse_end - begin_common_sequence);
-        PushCommonSubsequence(result, 
-            first_begin, first_begin + begin_common_sequence);
-        PushCommonSubsequence(result, 
-            first_begin + first_size - end_common_sequence, first_end);
+        result.insert(result.end(), first_begin, first_begin + begin_common_sequence);
+        result.insert(result.end(), first_begin + first_size - end_common_sequence, first_end);
         return result;
     }
     
@@ -199,9 +173,8 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
     Sequence end_part = LCSGetSubsequence<Sequence>(first_begin + separator.first, first_end,
         second_begin + separator.second, second_end, distance - bound_distance);
 
-    AddFromTo(begin_part, result);
-    AddFromTo(end_part, result);
-    
+    result.insert(result.end(), begin_part.begin(), begin_part.end());
+    result.insert(result.end(), end_part.begin(), end_part.end());
     return result;    
 }
 

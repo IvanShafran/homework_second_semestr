@@ -61,7 +61,7 @@ bool Check(std::string& first_string, std::string& second_string, std::string su
 void TestLCSGetSubstring_Random()
 {
     srand(777);
-    for (int count = 0; count < 1000; count++) {
+    for (int count = 0; count < 100; count++) {
         int first_length = Rand(0, 1001);
         int second_length = Rand(0, 1001);
         std::string symbol_set = "abcdefghijklmnopqrstuvwxyz";
@@ -77,9 +77,9 @@ void TestLCSGetSubstring_Random()
 void TestLCSGetSubstring_BigTest()
 {
     srand(777);
-    for (int count = 0; count < 5; count++) {
-        int first_length = 10000;
-        int second_length = 10000;
+    for (int count = 0; count < 3; count++) {
+        int first_length = 5000;
+        int second_length = 5000;
         std::string symbol_set = 
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=";
         std::string first_string = RandString(first_length, symbol_set);
