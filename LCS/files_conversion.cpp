@@ -163,6 +163,39 @@ void TestFiles—onversion(int count_iterations, int min_file_size, int max_file_s
     }
 }
 
+void DoSimilarFiles(int size, int max_line_size, std::string symbol_set)
+{
+    RandFile("first_file.txt", size, 0, max_line_size, symbol_set);
+    
+    //generate similar second file
+    std::ifstream first_file("first_file.txt");
+    std::ofstream second_file("second_file.txt");
+
+    srand(777);
+    while (!first_file.eof()) {
+        std::string line;
+        std::getline(first_file, line);
+
+        if ((rand() % 5) == 0)
+            line = line + '-';
+        second_file << line << std::endl;
+    }
+
+}
+
+void TestFiles—onversionSimilarFiles(int count_iterations, int max_file_size,
+    int max_line_size, std::string symbol_set, std::string error_text)
+{
+    srand(777);
+    for (int i = 0; i < count_iterations; i++)
+    {
+        int size = Rand(0, max_file_size);
+        DoSimilarFiles(size, max_line_size, symbol_set);
+
+        FilesConverison();
+        CheckConversion(error_text);
+    }
+}
 
 void TestFiles—onversion()
 {
@@ -172,4 +205,6 @@ void TestFiles—onversion()
     TestFiles—onversion(1, 50000, 100000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
     TestFiles—onversion(100, 500, 1000, 50, 100, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
     TestFiles—onversion(100, 500, 1000, 999, 1000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
+    
+    TestFiles—onversionSimilarFiles(100, 1000, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
 }

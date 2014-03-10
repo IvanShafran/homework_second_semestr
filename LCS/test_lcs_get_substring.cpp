@@ -95,5 +95,5 @@ void TestLCSGetSubstring()
 {
     TestLCSGetSubstring_Simple();
     TestLCSGetSubstring_Random();
-    //TestLCSGetSubstring_BigTest();
+    TestLCSGetSubstring_BigTest();
 }
