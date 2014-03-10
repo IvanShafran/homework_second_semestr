@@ -149,7 +149,7 @@ void CheckConversion(std::string error_text)
         throw std::runtime_error("Error: " + error_text);
 }
 
-void TestFiles—onversion(int count_iterations, int min_file_size, int max_file_size, 
+void TestFilesConversion(int count_iterations, int min_file_size, int max_file_size, 
     int min_line_size, int max_line_size, std::string symbol_set, std::string error_text)
 {
     srand(777);
@@ -185,7 +185,7 @@ void DoSimilarFiles(int size, int max_line_size, std::string symbol_set)
 
 }
 
-void TestFiles—onversionSimilarFiles(int count_iterations, int max_file_size,
+void TestFilesConversionSimilarFiles(int count_iterations, int max_file_size,
     int max_line_size, std::string symbol_set, std::string error_text)
 {
     srand(777);
@@ -199,15 +199,15 @@ void TestFiles—onversionSimilarFiles(int count_iterations, int max_file_size,
     }
 }
 
-void TestFiles—onversion()
+void TestFilesConversion()
 {
-    TestFiles—onversion(1000, 0, 10, 0, 2, "ab", "TestFiles—onversion Small Size of File Test, Short lines");
-    TestFiles—onversion(100, 50, 100, 0, 2, "ab", "TestFiles—onversion Medium Size of File Test, Short lines");
-    TestFiles—onversion(50, 500, 1000, 0, 2, "ab", "TestFiles—onversion Big Size of File Test, Short lines");
-    TestFiles—onversion(1, 5000, 10000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
-    TestFiles—onversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
-    TestFiles—onversion(100, 50, 100, 2500, 5000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
+    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFiles—onversion Small Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFiles—onversion Medium Size of File Test, Short lines");
+    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFiles—onversion Big Size of File Test, Short lines");
+    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
+    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
     
-    TestFiles—onversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
+    TestFilesConversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
     
 }

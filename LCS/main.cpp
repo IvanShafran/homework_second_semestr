@@ -16,7 +16,7 @@ int main()
         std::cout << "TestLCSubsequenceDistance OK" << std::endl;
         TestLCSGetSubstring();
         std::cout << "TestLCSGetSubstring OK" << std::endl;
-        TestFilesÑonversion();
+        TestFilesConversion();
         std::cout << "TestFilesConversion OK" << std::endl;
         system("PAUSE");
         return 0;
