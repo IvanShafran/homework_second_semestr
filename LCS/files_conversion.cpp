@@ -8,16 +8,16 @@
 
 void ReadFile(std::ifstream& file, std::vector<size_t>& sequence,  
     std::map<std::string, size_t>& get_key,
-    std::map<size_t, std::string>& get_string, size_t& key)
+    std::vector<std::string>& get_string, size_t& key)
 {
     while (!file.eof()) {
         std::string line;
         std::getline(file, line);
 
         if (get_key.find(line) == get_key.end()) {
-            key++;
             get_key[line] = key;
-            get_string[key] = line;
+            get_string.push_back(line);
+            key++;
         }
 
         sequence.push_back(get_key[line]);
@@ -25,7 +25,7 @@ void ReadFile(std::ifstream& file, std::vector<size_t>& sequence,
 }
 
 template <class Iterator>
-void WriteLine(std::ofstream& file, std::map<size_t, std::string>& get_string,
+void WriteLine(std::ofstream& file, std::vector<std::string>& get_string,
     Iterator iterator, std::string addition)
 {
     file << addition << get_string[*iterator] << std::endl;
@@ -33,7 +33,7 @@ void WriteLine(std::ofstream& file, std::map<size_t, std::string>& get_string,
 
 void WriteConversion(std::vector<size_t>& first_sequence, 
     std::vector<size_t>& second_sequence, std::vector<size_t>& subsequence, 
-    std::map<size_t, std::string>& get_string)
+    std::vector<std::string>& get_string)
 {
     std::ofstream file("conversion.txt");
 
@@ -82,7 +82,7 @@ void FilesConverison()
     std::ifstream second_file("second_file.txt");
 
     std::map<std::string, size_t> get_key;
-    std::map<size_t, std::string> get_string;
+    std::vector<std::string> get_string;
     std::vector<size_t> first_sequence;
     std::vector<size_t> second_sequence;
     size_t key = 0;
