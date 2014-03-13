@@ -5,6 +5,15 @@
 #include "test_lcs_get_substring.h"
 #include "test_files_conversion.h"
 
+// @review: Нужна программа, которая будет принимать пару имен файлов и выводить
+// @review: редакторский скрипт преобразующий последовательность первый файл во второй.
+// @review:
+// @review:   # diff.exe file1 file2
+// @reivew:    common line
+// @review:   -line from file1
+// @review:   +line from file2
+// @reivew:    common line
+// @review:   ...
 int main()
 {
     try {
