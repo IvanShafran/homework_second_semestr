@@ -38,6 +38,8 @@ void TestCPL_Simple()
 
 }
 
+
+// @review: Хорошо бы в названии отразать, что проверяет функция.
 bool Check(size_t first_position, size_t second_position,
     const std::string& first_string, const std::string& second_string,
     int common_prefix_length)
@@ -46,6 +48,7 @@ bool Check(size_t first_position, size_t second_position,
         || (second_position + common_prefix_length) > second_string.length())
         return false;
 
+    // @review: Для memcmp() нужен include <cstring>.
     if (0 != memcmp(&first_string[first_position],
                     &second_string[second_position],
                     common_prefix_length * sizeof(first_string[first_position]))) {

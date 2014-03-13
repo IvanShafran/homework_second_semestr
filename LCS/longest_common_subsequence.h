@@ -53,6 +53,7 @@ std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
 template <class Sequence>
 int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
 {
+    // @review: Естественнее пользоваться методом .empty().
     if ((first_sequence.size() == 0) || (second_sequence.size() == 0))
         return std::max(first_sequence.size(), second_sequence.size());
 
@@ -72,6 +73,8 @@ int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
             return bound;
         }
     }
+    // @review: Хорошо бы здесь бросить исключение. Либо изменить код так,
+    // @review: чтобы было очевидно, что цикл не может завершиться по условию.
 }
 
 template <class Iterator>
@@ -137,7 +140,7 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
 {    
     Sequence result;
     int first_size = first_end - first_begin;
-    int second_size = second_end - second_begin;
+    int second_size = second_end - second_begin; // @review: Эта переменная не используется.
 
     if (first_begin == first_end || second_begin == second_end) {
         return result;
