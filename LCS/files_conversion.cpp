@@ -230,12 +230,12 @@ void TestFilesConversionSimilarFiles(int count_iterations, int max_file_size,
 
 void TestFilesConversion()
 {
-    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFiles�onversion Small Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFiles�onversion Medium Size of File Test, Short lines");
-    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFiles�onversion Big Size of File Test, Short lines");
-    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFiles�onversion Huge Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles�onversion Medium Size of File Test, Medium Size of lines");
-    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFiles�onversion Medium Size of File Test, Long lines");
+    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFilesConversion: Small Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFilesConversion: Medium Size of File Test, Short lines");
+    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFilesConversion: Big Size of File Test, Short lines");
+    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFilesConversion: Huge Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFilesConversion: Medium Size of File Test, Medium Size of lines");
+    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFilesConversion: Medium Size of File Test, Long lines");
     
     TestFilesConversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
     
