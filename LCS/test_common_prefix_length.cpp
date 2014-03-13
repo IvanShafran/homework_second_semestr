@@ -38,6 +38,8 @@ void TestCPL_Simple()
 
 }
 
+
+// @review: Хорошо бы в названии отразать, что проверяет функция.
 bool Check(size_t first_position, size_t second_position,
     const std::string& first_string, const std::string& second_string,
     int common_prefix_length)
