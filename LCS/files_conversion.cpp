@@ -6,10 +6,17 @@
 #include "longest_common_subsequence.h"
 #include "random_functions.h"
 
+// @review: Стоит разделить эту большую фнукцию на несколько более простых.
+// @review: Ввод последовательности строк из файла -- отдельно.
+// @review: Преобразование последовательности строк в последовательность
+// @review: идентификаторов -- отдельно.
 void ReadFile(std::ifstream& file, std::vector<size_t>& sequence,  
     std::map<std::string, size_t>& get_key,
     std::vector<std::string>& get_string, size_t& key)
 {
+    // @review: Завязываться на флаг eof() не очень хорошо. Если происходит
+    // @review: ошибка ввода-вывода, то этот флаг не выставляется. Получится
+    // @review: бесконечный цикл.
     while (!file.eof()) {
         std::string line;
         std::getline(file, line);
@@ -31,10 +38,20 @@ void WriteLine(std::ofstream& file, std::vector<std::string>& get_string,
     file << addition << get_string[*iterator] << std::endl;
 }
 
+
+// @review: Если значение параметра не меняется, то правильнее
+// @review: пользоваться константными ссылками.
+//
+// @review: void WriteConversion(const std::string& filename,
+//                               const std::vector<std::string>& first_sequence, 
+//                               const std::vector<std::string>& second_sequence, 
+//                               const std::vector<size_t>& subsequence);
+
 void WriteConversion(std::vector<size_t>& first_sequence, 
     std::vector<size_t>& second_sequence, std::vector<size_t>& subsequence, 
     std::vector<std::string>& get_string)
 {
+    // @review: Имя файла лучше передавать извне.
     std::ofstream file("conversion.txt");
 
     auto first_iterator = first_sequence.begin();
@@ -47,17 +64,17 @@ void WriteConversion(std::vector<size_t>& first_sequence,
 
         if (*first_iterator == *second_iterator
             && *second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "");
+            WriteLine(file, get_string, first_iterator, " ");
             first_iterator++;
             second_iterator++;
             subsequence_iterator++;
         }
         else if (*second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "- ");
+            WriteLine(file, get_string, first_iterator, "-");
             first_iterator++;
         }
         else {
-            WriteLine(file, get_string, second_iterator, "+ ");
+            WriteLine(file, get_string, second_iterator, "+");
             second_iterator++;
         }
     }
@@ -76,12 +93,22 @@ void WriteConversion(std::vector<size_t>& first_sequence,
     }
 }
 
+// 
 void FilesConverison()
 {
+    // @review: Имена файлов лучше передавать извне.
     std::ifstream first_file("first_file.txt");
     std::ifstream second_file("second_file.txt");
 
+    // @review: Imho, можно немного проще:
+    // @review:   const std::vector<std::string> first_sequence = ReadFile(first_filename);
+    // @review:   const std::vector<std::string> second_sequence = ReadFile(second_filename);
+    // @review:   const std::vector<size_t> common_subsequence = GetLCSSubsequence(
+    // @review:       integrize(first_sequence, &map), integrize(second_sequence, &map));
+
+
     std::map<std::string, size_t> get_key;
+    
     std::vector<std::string> get_string;
     std::vector<size_t> first_sequence;
     std::vector<size_t> second_sequence;
@@ -201,12 +228,12 @@ void TestFilesConversionSimilarFiles(int count_iterations, int max_file_size,
 
 void TestFilesConversion()
 {
-    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFiles�onversion Small Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFiles�onversion Medium Size of File Test, Short lines");
-    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFiles�onversion Big Size of File Test, Short lines");
-    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFiles�onversion Huge Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles�onversion Medium Size of File Test, Medium Size of lines");
-    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFiles�onversion Medium Size of File Test, Long lines");
+    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFiles�onversion Small Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFiles�onversion Medium Size of File Test, Short lines");
+    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFiles�onversion Big Size of File Test, Short lines");
+    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFiles�onversion Huge Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles�onversion Medium Size of File Test, Medium Size of lines");
+    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFiles�onversion Medium Size of File Test, Long lines");
     
     TestFilesConversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
     
