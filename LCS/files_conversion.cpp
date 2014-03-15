@@ -1,103 +1,8 @@
 #include <fstream>
-#include <map>
-#include <vector>
 #include <string>
 
-#include "longest_common_subsequence.h"
 #include "random_functions.h"
-
-void ReadFile(std::ifstream& file, std::vector<size_t>& sequence,  
-    std::map<std::string, size_t>& get_key,
-    std::vector<std::string>& get_string, size_t& key)
-{
-    while (!file.eof()) {
-        std::string line;
-        std::getline(file, line);
-
-        if (get_key.find(line) == get_key.end()) {
-            get_key[line] = key;
-            get_string.push_back(line);
-            key++;
-        }
-
-        sequence.push_back(get_key[line]);
-    }
-}
-
-template <class Iterator>
-void WriteLine(std::ofstream& file, std::vector<std::string>& get_string,
-    Iterator iterator, std::string addition)
-{
-    file << addition << get_string[*iterator] << std::endl;
-}
-
-void WriteConversion(std::vector<size_t>& first_sequence, 
-    std::vector<size_t>& second_sequence, std::vector<size_t>& subsequence, 
-    std::vector<std::string>& get_string)
-{
-    std::ofstream file("conversion.txt");
-
-    auto first_iterator = first_sequence.begin();
-    auto second_iterator = second_sequence.begin();
-    auto subsequence_iterator = subsequence.begin();
-
-    while (first_iterator != first_sequence.end() &&
-        second_iterator != second_sequence.end() &&
-        subsequence_iterator != subsequence.end()) {
-
-        if (*first_iterator == *second_iterator
-            && *second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "");
-            first_iterator++;
-            second_iterator++;
-            subsequence_iterator++;
-        }
-        else if (*second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "- ");
-            first_iterator++;
-        }
-        else {
-            WriteLine(file, get_string, second_iterator, "+ ");
-            second_iterator++;
-        }
-    }
-
-    if (subsequence_iterator != subsequence.end())
-        throw std::logic_error("WriteConversion: Wrong common subsequence");
-
-    while (first_iterator != first_sequence.end()) {
-        WriteLine(file, get_string, first_iterator, "- ");
-        first_iterator++;
-    }
-
-    while (second_iterator != second_sequence.end()) {
-        WriteLine(file, get_string, second_iterator, "+ ");
-        second_iterator++;
-    }
-}
-
-void FilesConverison()
-{
-    std::ifstream first_file("first_file.txt");
-    std::ifstream second_file("second_file.txt");
-
-    std::map<std::string, size_t> get_key;
-    std::vector<std::string> get_string;
-    std::vector<size_t> first_sequence;
-    std::vector<size_t> second_sequence;
-    size_t key = 0;
-
-    ReadFile(first_file, first_sequence, get_key, get_string, key);
-    ReadFile(second_file, second_sequence, get_key, get_string, key);
-
-    std::vector<size_t> common_subsequence = 
-        LCSGetSubsequence(first_sequence, second_sequence);
-
-    WriteConversion(first_sequence, second_sequence, 
-        common_subsequence, get_string);
-}
-
-/*\/ \/ \/ TESTING \/ \/ \/*/
+#include "files_conversion.h"
 
 template <class Iterator>
 bool equal_sequence(Iterator first_begin, Iterator first_end,
@@ -126,13 +31,13 @@ void CheckConversion(std::string error_text)
         std::getline(conversion, line);
 
         if (line[0] == '+') {
-            if (!equal_sequence(line.begin() + 2, line.end(),
+            if (!equal_sequence(line.begin() + 1, line.end(),
                 second_line.begin(), second_line.end()))
                 throw std::runtime_error("Error: " + error_text);
             std::getline(second_file, second_line);
         }
         else if (line[0] == '-') {
-            if (!equal_sequence(line.begin() + 2, line.end(),
+            if (!equal_sequence(line.begin() + 1, line.end(),
                 first_line.begin(), first_line.end()))
                 throw std::runtime_error("Error: " + error_text);
             std::getline(first_file, first_line);
@@ -160,7 +65,7 @@ void TestFilesConversion(int count_iterations, int min_file_size, int max_file_s
         RandFile("first_file.txt", first_size, min_line_size, max_line_size, symbol_set);
         RandFile("second_file.txt", second_size, min_line_size, max_line_size, symbol_set);
 
-        FilesConverison();
+        FilesConverison("first_file.txt", "second_file.txt", "conversion.txt");
         CheckConversion(error_text);
     }
 }
@@ -194,19 +99,19 @@ void TestFilesConversionSimilarFiles(int count_iterations, int max_file_size,
         int size = Rand(0, max_file_size);
         DoSimilarFiles(size, max_line_size, symbol_set);
 
-        FilesConverison();
+        FilesConverison("first_file.txt", "second_file.txt", "conversion.txt");
         CheckConversion(error_text);
     }
 }
 
 void TestFilesConversion()
 {
-    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFiles—onversion Small Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFiles—onversion Medium Size of File Test, Short lines");
-    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFiles—onversion Big Size of File Test, Short lines");
-    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFiles—onversion Huge Size of File Test, Short lines");
-    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFiles—onversion Medium Size of File Test, Medium Size of lines");
-    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFiles—onversion Medium Size of File Test, Long lines");
+    TestFilesConversion(1000, 0, 10, 0, 2, "ab", "TestFilesConversion Small Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 0, 2, "ab", "TestFilesConversion Medium Size of File Test, Short lines");
+    TestFilesConversion(50, 500, 1000, 0, 2, "ab", "TestFilesConversion Big Size of File Test, Short lines");
+    TestFilesConversion(1, 5000, 10000, 0, 4, "ab", "TestFilesConversion Huge Size of File Test, Short lines");
+    TestFilesConversion(100, 50, 100, 250, 500, "abcdefg", "TestFilesConversion Medium Size of File Test, Medium Size of lines");
+    TestFilesConversion(100, 50, 100, 2500, 5000, "abc", "TestFilesConversion Medium Size of File Test, Long lines");
     
     TestFilesConversionSimilarFiles(100, 100, 100, "abcdefgh", "TestFilesConversionSimilarFiles");
     

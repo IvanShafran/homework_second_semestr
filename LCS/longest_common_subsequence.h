@@ -16,13 +16,14 @@ int CommonPrefixLength(Iterator first_begin, Iterator first_end,
         && (*first_begin) == (*second_begin)) {
         ++first_begin;
         ++second_begin;
-        length++;
+        ++length;
     }
+
     return length;
 }
 
 template <class Iterator>
-std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
+std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>* bounds,
     Iterator first_begin, Iterator first_end, 
     Iterator second_begin, Iterator second_end)
 {
@@ -31,10 +32,10 @@ std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
 
     int x;
     if (diagonal == -bound || (diagonal != bound
-        && bounds[diagonal - 1] < bounds[diagonal + 1]))
-        x = bounds[diagonal + 1];
+        && (*bounds)[diagonal - 1] < (*bounds)[diagonal + 1]))
+        x = (*bounds)[diagonal + 1];
     else
-        x = bounds[diagonal - 1] + 1;
+        x = (*bounds)[diagonal - 1] + 1;
 
     int y = x - diagonal;
 
@@ -45,7 +46,7 @@ std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
         y += common_prefix_length;
     }
 
-    bounds[diagonal] = x;
+    (*bounds)[diagonal] = x;
 
     return std::pair<int, int>(x, y);
 }
@@ -53,7 +54,7 @@ std::pair<int, int> LCSDoStep(int bound, int diagonal, SignedArray<int>& bounds,
 template <class Sequence>
 int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
 {
-    if ((first_sequence.size() == 0) || (second_sequence.size() == 0))
+    if (first_sequence.empty() || second_sequence.empty())
         return std::max(first_sequence.size(), second_sequence.size());
 
     int first_size = first_sequence.size(), second_size = second_sequence.size();
@@ -62,9 +63,9 @@ int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
     SignedArray<int> bounds(-total_size, total_size);
     bounds[1] = 0;
 
-    for (int bound = 0; bound <= total_size; bound++)
+    for (int bound = 0; bound <= total_size; ++bound)
     for (int diagonal = -bound; diagonal <= bound; diagonal += 2) {
-        std::pair<int, int> position = LCSDoStep(bound, diagonal, bounds, 
+        std::pair<int, int> position = LCSDoStep(bound, diagonal, &bounds, 
             first_sequence.begin(), first_sequence.end(),
             second_sequence.begin(), second_sequence.end());
 
@@ -72,6 +73,8 @@ int LCSDistance(const Sequence& first_sequence, const Sequence& second_sequence)
             return bound;
         }
     }
+
+    throw std::logic_error("LCDistance: unexpected end of function");
 }
 
 template <class Iterator>
@@ -88,9 +91,9 @@ SignedArray<int> LCSBounds(Iterator first_begin, Iterator first_end,
 
     bounds[1] = 0;
 
-    for (int bound = 0; bound <= distance; bound++)
+    for (int bound = 0; bound <= distance; ++bound)
     for (int diagonal = -bound; diagonal <= bound; diagonal += 2) 
-        LCSDoStep(bound, diagonal, bounds, first_begin, first_end,
+        LCSDoStep(bound, diagonal, &bounds, first_begin, first_end,
             second_begin, second_end);    
 
     return bounds;
@@ -119,7 +122,7 @@ std::pair<int, int> LCSGetSeparator(int distance,
     int first_subsequence_begin, second_subsequence_begin;
     int min_index = std::max(bounds.GetLeftBound(), reverse_bounds.GetLeftBound());
     int max_index = std::min(bounds.GetRightBound(), reverse_bounds.GetRightBound());
-    for (int diagonal = min_index; diagonal <= max_index; diagonal++)
+    for (int diagonal = min_index; diagonal <= max_index; ++diagonal)
     if ((bounds[diagonal] + reverse_bounds[diagonal]) >= first_size)
     {
         first_subsequence_begin = first_size - reverse_bounds[diagonal];
@@ -137,7 +140,6 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
 {    
     Sequence result;
     int first_size = first_end - first_begin;
-    int second_size = second_end - second_begin;
 
     if (first_begin == first_end || second_begin == second_end) {
         return result;

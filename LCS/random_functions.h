@@ -17,7 +17,7 @@ inline std::string RandString(int length, const std::string& symbol_set)
 {
     if (length < 0)
         throw std::length_error("RandString(): length < 0");
-    if (symbol_set.length() == 0)
+    if (symbol_set.empty())
         throw std::runtime_error("RandString(): symbol_set is empty");
 
     std::string result;
@@ -33,7 +33,7 @@ std::vector<T> RandVector(int size, const std::vector<T>& element_set)
 {
     if (size < 0)
         throw std::length_error("RandVector(): size < 0");
-    if (element_set.size() == 0)
+    if (element_set.empty())
         throw std::runtime_error("RandVector(): element_set is empty");
 
     std::vector<T> result;

@@ -1,29 +1,34 @@
 #include <iostream>
-#include "test_longest_common_substring_distance.h"
-#include "test_longest_common_subsequence_distance.h"
-#include "test_common_prefix_length.h"
-#include "test_lcs_get_substring.h"
-#include "test_files_conversion.h"
+#include <stdexcept>
+#include "files_conversion.h"
 
-int main()
+void Usage()
 {
-    try {
-        TestCommonPrefixLength();
-        std::cout << "TestCommonPrefixLength OK" << std::endl;
-        TestLCSubstringDistance();
-        std::cout << "TestLCSubstringDistance OK" << std::endl;
-        TestLCSubsequenceDistance();
-        std::cout << "TestLCSubsequenceDistance OK" << std::endl;
-        TestLCSGetSubstring();
-        std::cout << "TestLCSGetSubstring OK" << std::endl;
-        TestFilesConversion();
-        std::cout << "TestFilesConversion OK" << std::endl;
-        system("PAUSE");
-        return 0;
+    std::cerr << "Usage: first_filename, second_filename, conversin_filename(conversion.txt by default)" << std::endl;
+    std::exit(-1);
+}
+
+void GetDifference(std::string first_filename, std::string second_filename,
+                   std::string difference_filename = "conversion.txt")
+{
+    FilesConverison(first_filename, second_filename, difference_filename);
+}
+
+int main(int argc, const char** argv)
+{
+    std::ios_base::sync_with_stdio(false);
+
+    if (argc == 3) {
+        GetDifference(static_cast<std::string>(argv[1]), static_cast<std::string>(argv[2]));
     }
-    catch (const std::exception& ex) {
-        std::cerr << "Exception: " << ex.what() << std::endl;
-        system("PAUSE");
-        return -1;
+    else
+    if (argc == 4) {
+        GetDifference(static_cast<std::string>(argv[1]), static_cast<std::string>(argv[2]), 
+            static_cast<std::string>(argv[3]));
     }
+    else {
+        Usage();
+    }
+
+    return 0;
 }
