@@ -1,12 +1,15 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "unit_test.h"
+#include "graph_unit_test.h"
+#include "graph_test.h"
+#include "bfs_unit_test.h"
 
 int main()
 {
     try {
-        UnitTest();
+        GraphUnitTest();
+        GraphTest();
     }
     catch (const std::exception& ex) {
         std::cerr << "Exception: " << ex.what() << std::endl;

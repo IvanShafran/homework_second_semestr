@@ -105,6 +105,13 @@ public:
         MakeCompactGraph(number_of_vertices, edge_begin, edge_end);
     }
 
+    Graph(Graph& graph)
+    {
+        if (edges_ != nullptr)
+            MakeCompactGraph(0, {}, {});
+        std::swap(edges_, graph.edges_);
+    }
+
     size_t GetNumberOfVertices() const
     {
         return edges_->GetNumberOfVertices();

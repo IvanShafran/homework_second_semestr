@@ -5,68 +5,95 @@
 
 #include "graph.h"
 
-enum colors { white, grey, black };
+enum colors { WHITE, GREY, BLACK };
 
 class DefaultUserClass {
 public:
     DefaultUserClass()
     {}
 
-    void BeforeStep()
+    void BeforeProcessing(size_t vertex)
     {}
 
-    void BeforeWhiteVertex()
+    void ProcessWhiteVertex(size_t edge_begin, size_t edge_end)
     {}
 
-    void BeforeGreyVertex()
+    void ProcessGreyVertex(size_t edge_begin, size_t edge_end)
     {}
 
-    void BeforeBlackVertex()
+    void ProcessBlackVertex(size_t edge_begin, size_t edge_end)
     {}
 
-    void AfterStep()
+    void AfterProcessing(size_t vertex)
     {}
 };
 
 template <class T>
-void DFSStep(const Graph& graph, size_t vertex, std::vector<colors>* color, T* user_class)
+void DFSStep(const Graph& graph, T* user_class,
+    std::vector<colors>* color,
+    std::vector<std::vector<size_t> >* incidence_list, 
+    std::vector<std::vector<size_t>::iterator >* incidence_iterator,
+    std::stack<size_t>* vertex_stack)
 {
-    user_class->BeforeStep(vertex);
+    while (!vertex_stack->empty()) {
+        size_t vertex = vertex_stack->top();
 
-    (*color)[vertex] = grey;
-
-    std::vector<size_t> incidence_list = graph.GetIncidenceList(vertex);
-
-    for (size_t incidence_vertex_index = 0; incidence_vertex_index < incidence_list.size();
-        ++incidence_vertex_index) {
-        size_t incidence_vertex = incidence_list[incidence_vertex_index];
-        if (color[incidence_vertex] == white) {
-            user_class->BeforeWhiteVertex(vertex, incidence_vertex);
-            DFSStep(graph, incidence_vertex, used);
+        if ((*color)[vertex] == WHITE) {
+            user_class->BeforeProcessing(vertex);
+            
+            (*incidence_list)[vertex] = graph.GetIncidenceList(vertex);
+            (*incidence_iterator)[vertex] = (*incidence_list)[vertex].begin();
+            (*color)[vertex] = GREY;
         }
-        else
-        if (color[incidence_vertex] == grey) {
-            user_class->BeforeGreyVertex(vertex, incidence_vertex);
+
+        if ((*incidence_iterator)[vertex] == (*incidence_list)[vertex].end()) {
+            vertex_stack->pop();
+            (*incidence_list)[vertex].resize(0);
+            (*color)[vertex] = BLACK;
+
+            user_class->AfterProcessing(vertex);
         }
-        else
-        if (color[incidence_vertex] == black) {
-            user_class->BeforeBlackVertex(vertex, incidence_vertex);
+        else {
+            size_t incidence_vertex = *((*incidence_iterator)[vertex]);
+            if ((*color)[incidence_vertex] == WHITE) {
+                user_class->ProcessWhiteVertex(vertex, incidence_vertex);
+
+                vertex_stack->push(incidence_vertex);
+            }
+            else
+            if ((*color)[incidence_vertex] == GREY) {
+                user_class->ProcessGreyVertex(vertex, incidence_vertex);
+            }
+            else
+            if ((*color)[incidence_vertex] == BLACK) {
+                user_class->ProcessBlackVertex(vertex, incidence_vertex);
+            }
+
+            ++(*incidence_iterator)[vertex];
         }
     }
-
-    (*color)[vertex] = black;
-
-    user_class->AfterStep(vertex);
 }
 
-
-template <class T>
-void DFS(const Graph& graph, T* user_class = DefaultUserClass())
+template <class T = DefaultUserClass>
+void DFS(const Graph& graph, T* user_class = &DefaultUserClass())
 {
-    std::vector<colors> color(graph.GetNumberOfVertices(), white);
+    size_t number_of_vertices = graph.GetNumberOfVertices();
+    
+    std::vector<colors> color(number_of_vertices, WHITE);
 
-    for (size_t vertex = 0; vertex < graph.GetNumberOfVertices(); ++vertex)
-    if (color[vertex] == white) {
-        DFSStep(graph, vertex, color, user_class);
+    std::vector<std::vector<size_t> > incidence_list;
+    incidence_list.resize(number_of_vertices);
+
+    std::vector<std::vector<size_t>::iterator > incidence_iterator;    
+    incidence_iterator.resize(number_of_vertices);
+
+    std::stack<size_t> vertex_stack;
+
+    for (size_t start_vertex = 0; start_vertex < number_of_vertices;
+        ++start_vertex) 
+    if (color[start_vertex] == WHITE) {
+        vertex_stack.push(start_vertex);        
+        DFSStep(graph, user_class, &color, &incidence_list, &incidence_iterator,
+            &vertex_stack);
     }
 }
