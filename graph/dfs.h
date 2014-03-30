@@ -31,7 +31,7 @@ public:
 template <class T>
 void DFSStep(const Graph& graph, T* user_class,
     std::vector<colors>* color,
-    std::vector<std::vector<size_t> >* incidence_list, 
+    std::vector<std::vector<size_t> >* incidence_lists, 
     std::vector<std::vector<size_t>::iterator >* incidence_iterator,
     std::stack<size_t>* vertex_stack)
 {
@@ -41,14 +41,14 @@ void DFSStep(const Graph& graph, T* user_class,
         if ((*color)[vertex] == WHITE) {
             user_class->BeforeProcessing(vertex);
             
-            (*incidence_list)[vertex] = graph.GetIncidenceList(vertex);
-            (*incidence_iterator)[vertex] = (*incidence_list)[vertex].begin();
+            (*incidence_lists)[vertex] = graph.GetIncidenceList(vertex);
+            (*incidence_iterator)[vertex] = (*incidence_lists)[vertex].begin();
             (*color)[vertex] = GREY;
         }
 
-        if ((*incidence_iterator)[vertex] == (*incidence_list)[vertex].end()) {
+        if ((*incidence_iterator)[vertex] == (*incidence_lists)[vertex].end()) {
             vertex_stack->pop();
-            (*incidence_list)[vertex].resize(0);
+            (*incidence_lists)[vertex].resize(0);
             (*color)[vertex] = BLACK;
 
             user_class->AfterProcessing(vertex);
@@ -81,8 +81,8 @@ void DFS(const Graph& graph, T* user_class = &DefaultUserClass())
     
     std::vector<colors> color(number_of_vertices, WHITE);
 
-    std::vector<std::vector<size_t> > incidence_list;
-    incidence_list.resize(number_of_vertices);
+    std::vector<std::vector<size_t> > incidence_lists;
+    incidence_lists.resize(number_of_vertices);
 
     std::vector<std::vector<size_t>::iterator > incidence_iterator;    
     incidence_iterator.resize(number_of_vertices);
@@ -93,7 +93,7 @@ void DFS(const Graph& graph, T* user_class = &DefaultUserClass())
         ++start_vertex) 
     if (color[start_vertex] == WHITE) {
         vertex_stack.push(start_vertex);        
-        DFSStep(graph, user_class, &color, &incidence_list, &incidence_iterator,
+        DFSStep(graph, user_class, &color, &incidence_lists, &incidence_iterator,
             &vertex_stack);
     }
 }

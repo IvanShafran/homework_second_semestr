@@ -17,7 +17,7 @@ std::vector<int> BFS(const Graph& graph, size_t vertex)
     distance[vertex] = 0;
 
     while (!queue.empty()) {
-        size_t current_vertex = queue.back();
+        size_t current_vertex = queue.front();
         queue.pop();
         used[current_vertex] = true;
 
