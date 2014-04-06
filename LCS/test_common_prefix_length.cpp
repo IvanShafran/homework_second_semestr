@@ -10,6 +10,8 @@ int GetCPL(std::string first_string, std::string second_string)
         second_string.begin(), second_string.end());
 }
 
+// @review: Слова в названиях функций лучше не сокращать.
+// @review: Что такое CPL догадаться можно только по реализации.
 void TestCPL_Simple()
 {
     if (GetCPL("", "") != 0)
@@ -29,7 +31,7 @@ void TestCPL_Simple()
 
 }
 
-bool CheckCommonPrefix(size_t first_position, size_t second_position,
+bool CheckCommonPrefix(size_t first_position, size_t second_position, // @review: А зачем в этой функции: size_t first_position, size_t second_position?
     const std::string& first_string, const std::string& second_string,
     int common_prefix_length)
 {
