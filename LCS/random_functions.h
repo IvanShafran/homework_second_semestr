@@ -43,6 +43,9 @@ std::vector<T> RandVector(int size, const std::vector<T>& element_set)
     return result;
 }
 
+// @review: Для решения этой задачи не нужны случайные файлы. Алгоритм вычисляющий расстояния
+// @review: можно протестировать без файлов. А для тестирования ввода-вывода подойдут обычные
+// @review: файлы.
 inline void RandFile(std::string file_name, int size, int min_length, int max_length, std::string symbol_set)
 {
     if (size < 0)
