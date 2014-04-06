@@ -56,6 +56,8 @@ public:
         return array_.at(GetIndex(index));
     }   
 
+    // @review: Как правило в подобных методах результат возвращают по константной ссылке.
+    // @review: Это позволяет избежать копирования значения.
     T operator [] (int index) const {
         return array_.at(GetIndex(index));
     }
