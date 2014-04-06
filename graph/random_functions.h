@@ -56,6 +56,7 @@ inline void RandFile(std::string file_name, int size, int min_length, int max_le
     }
 }
 
+// @review: Можно воспользоваться std::random_shuffle.
 template <class Sequence>
 void RandomShuffle(Sequence* sequence)
 {
