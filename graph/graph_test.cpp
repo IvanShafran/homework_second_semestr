@@ -12,6 +12,16 @@
 #include "topological_sort_test.h"
 #include "random_functions.h"
 
+
+// @review: Для тестирования графа необходимо и достаточно проверить:
+// @review: 1. Класс ListOfEdges / MatrixOfEdges правильно инициализируется по списку ребер.
+// @review: 2. Все методы ListOfEdges / MatrixOfEdges работают правильно.
+// @review: 3. В классе ListOfEdges / MatrixOfEdges не течет память.
+// @review: 4. Фабричный метод правильно выбирает представление в зависимости от данных.
+
+// @review: Тесты с DFS/BFS стоит перенести в другие файлы.
+
+
 Graph GetFullGraph(size_t* number_of_vertices, size_t* number_of_edges)
 {
     *number_of_edges = 0;
@@ -102,6 +112,9 @@ Graph GetAcyclicGraph(size_t* number_of_vertices, size_t* number_of_edges)
 
 
 #ifdef _DEBUG
+
+// @review: Почему бы не завести функцию выполняющую тест на фиксированном наборе вершин и дуг.
+// @review: И затем уже вызывать её с разными наборами данных.
 void GraphMemoryTest(size_t number_of_tests, size_t number_of_vertices_step,  
     const std::function<Graph(size_t*, size_t*)>& GetGraph, 
     std::string graph_type)
@@ -110,6 +123,10 @@ void GraphMemoryTest(size_t number_of_tests, size_t number_of_vertices_step,
     
     for (size_t test = 0; test < number_of_tests; ++test)
     {
+        // @review: Логику отвечающую за поиск утечек стоит вынести в отдельный класс:
+        // @review:   MemoryMonitor monitor;
+        // @review:   ... // Do some computations.
+        // @review:   monitor.findLeaks();
         _CrtMemState memory_state_before_test;
         _CrtMemCheckpoint(&memory_state_before_test);
 
@@ -138,7 +155,7 @@ void GraphMemoryTest(size_t number_of_tests, size_t number_of_vertices_step,
         }
         _CrtMemState memory_state_after_test;
         _CrtMemCheckpoint(&memory_state_after_test);
-        _CrtMemState memore_difference;
+        _CrtMemState memore_difference; // @review: memore -> memory
 
         if (_CrtMemDifference(&memore_difference, &memory_state_before_test,
             &memory_state_after_test)) {
