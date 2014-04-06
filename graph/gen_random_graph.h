@@ -1,3 +1,4 @@
+// @review: Какую роль играет этот файл?
 #pragma once
 
 #include <vector>

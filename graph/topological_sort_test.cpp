@@ -76,6 +76,7 @@ void CheckTopologicalSort(const Graph& graph)
     if (graph_has_cyclic)
         return;
 
+    // @review: Вообще говоря, эту проверку можно выполнить за число дуг (а не за квадрат числа вершин как сейчас).
     for (size_t begin_index = 0; begin_index < graph.GetNumberOfVertices(); 
         ++begin_index)
     for (size_t end_index = 0; end_index < begin_index; ++end_index)

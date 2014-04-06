@@ -2,6 +2,10 @@
 
 #include <vector>
 
+// @review: Этот интерфейс естественнее было бы назвать Graph или Digraph.
+// @review: А вот текущий класс Graph выглядит лишним. Фактически он является
+// @review: умным указателем на Edges. Но std::unique_ptr<Edges> с этой задачей
+// @review: справится существенно лучше.
 class Edges {
 public:
     virtual size_t GetNumberOfVertices() const = 0;
@@ -41,6 +45,11 @@ public:
 
 class MatrixOfEdges: public Edges {
     size_t number_of_vertices_;
+
+    // @review: Двумерную матрицу можно смоделировать на одномерном векторе:
+    // @review:   matrix_of_edges_.resize((number_of_vertices + 1) * number_of_vertices, false);
+    // @review: (но в этом случае стоит завести отдельный класс Matrix, чтобы скрыть
+    // @review: логику преобразования индексов от пользователя)
     std::vector<std::vector<bool> > matrix_of_edges_;
 
 public:
@@ -52,6 +61,8 @@ public:
         matrix_of_edges_.resize(number_of_vertices, bool_vector);
         
         for (size_t i = 0; i < edge_begin.size(); ++i) {
+            // @review: Лучше пользоваться методом .at(), чтобы защититься от случая,
+            // @review: когда пользователь использовал в ребре несуществующую вершину.
             matrix_of_edges_[edge_begin[i]][edge_end[i]] = true;
         }
     }
@@ -72,6 +83,7 @@ public:
         return incidence_list;
     }
 };
+
 
 class Graph {
     Edges * edges_;
@@ -105,6 +117,17 @@ public:
         MakeCompactGraph(number_of_vertices, edge_begin, edge_end);
     }
 
+    // @review: Так делать не стоит.
+    // @review: Во-первых, конструктора копирования не достаточно.
+    // @review: Как минимум нужен ещё оператор присваивания.
+    // @review: Во-вторых, это меняет привычную семантику копирования.
+    // @review:
+    // @review: Лучше вместо этого класса воспользоваться std::unique_ptr. Либо написать так:
+    // @review:   Graph(const Graph&) = delete;
+    // @review:   Graph& operator= (const Graph&) = delete;
+    // @review:
+    // @review:   Graph(Graph&& graph) : edges_(nullptr) { *this = std::move(graph); }
+    // @review:   Graph& operator= (Graph&& graph) { std::swap(edges_, graph.edges_); return *this; }
     Graph(Graph& graph)
     {
         if (edges_ != nullptr)

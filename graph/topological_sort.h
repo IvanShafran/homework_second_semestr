@@ -13,6 +13,7 @@ class TopologicalSortClass
     bool graph_has_cyclic_;
 
 public:
+    // @review: Чтобы не было неявных конверсий из size_t в TopologicalSortClass, конструктор помечают словом explicit. 
     TopologicalSortClass(size_t number_of_vertices) : 
         position_(number_of_vertices - 1), 
         number_of_vertices_(number_of_vertices),
@@ -26,6 +27,8 @@ public:
         return graph_has_cyclic_;
     }
 
+    // @review: Не очевидно, что возвращает этот метод. Индексы вершин или порядок вершин.
+    // @review: Лучше поменять название класса так, чтобы такого вопроса не возникало.
     std::vector<size_t> GetOrder()
     {
         return order_;

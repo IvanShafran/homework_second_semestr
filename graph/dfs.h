@@ -1,3 +1,5 @@
+// @review: А есть где-нибудь тесты для DFS?
+
 #pragma once
 
 #include <vector>
@@ -9,6 +11,7 @@ enum colors { WHITE, GREY, BLACK };
 
 class DefaultUserClass {
 public:
+    // @review: Этот конструктор не нужен. Компилятор построит его самостоятельно.
     DefaultUserClass()
     {}
 
