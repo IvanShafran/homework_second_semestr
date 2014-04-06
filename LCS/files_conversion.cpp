@@ -1,3 +1,4 @@
+// @review: Если этот файл отвечает только за тестирование, то вероятно его стоит переименовать.
 #include <fstream>
 #include <string>
 
@@ -14,6 +15,7 @@ bool equal_sequence(Iterator first_begin, Iterator first_end,
         second_begin, second_end) == (first_end - first_begin);
 }
 
+// @review: Составные объекты нужно передавать по константной ссылке. Тогда будет меньше копирований.
 void CheckConversion(std::string error_text)
 {
     std::ifstream first_file("first_file.txt");
@@ -27,7 +29,7 @@ void CheckConversion(std::string error_text)
     std::getline(first_file, first_line);
     std::getline(second_file, second_line);
 
-    while (!conversion.eof()) {
+    while (!conversion.eof()) {  // @review: В случае ошибки ввода получится бесконечный цикл.
         std::getline(conversion, line);
 
         if (line[0] == '+') {
