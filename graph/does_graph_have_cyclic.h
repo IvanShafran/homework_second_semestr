@@ -10,6 +10,7 @@ public:
     CyclicSearchClass() : graph_has_cyclic_(false)
     {}
 
+    // @review: Правильней будет будет is cyclic или has cycle.
     bool DoesGraphHaveCyclic()
     {
         return graph_has_cyclic_;
