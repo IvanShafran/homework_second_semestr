@@ -33,6 +33,8 @@ void TestLCSubstringDistance_Simple()
         throw std::runtime_error("Error: TestLCSubstringDistance_Simple #9");
 }
 
+// @review: В соседнем файле уже есть реализация этого алгоритма для последовательностей.
+// @review: Можно сделать функцию шаблонной оставить только одну реализацию.
 int VagnerFisher(const std::string& first_string, const std::string& second_string)
 {
     int first_length = first_string.length();
