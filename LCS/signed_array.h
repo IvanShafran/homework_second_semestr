@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <vector>
 
 template <class T>
 class SignedArray{
@@ -42,6 +43,11 @@ public:
         return array_.size();
     }
 
+    std::vector<T> GetData()
+    {
+        return array_;
+    }
+    
     void Reverse()
     {
         std::reverse(array_.begin(), array_.end());
@@ -52,11 +58,19 @@ public:
         shift_ += shift; 
     }
     
-    T& operator [] (int index) {
+    T& operator[] (int index) {
         return array_.at(GetIndex(index));
     }   
 
-    T operator [] (int index) const {
+    const T& operator[] (int index) const {
         return array_.at(GetIndex(index));
+    }
+
+    void operator= (const std::vector<T>& vector)
+    {
+        if (vector.size() != array_.size())
+            throw std::runtime_error("Error on operator= SignedArray: wrong size of vector");
+
+        array_ = vector;
     }
 };

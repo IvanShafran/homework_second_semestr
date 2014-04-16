@@ -1,45 +1,65 @@
-#include <fstream>
+#pragma once
+
 #include <map>
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "longest_common_subsequence.h"
 
-void IntegrizeFile(std::ifstream* file, std::vector<size_t>* sequence,
-    std::map<std::string, size_t>* get_key,
-    std::vector<std::string>* get_string, size_t* key)
+inline std::vector<std::string> ReadStream(std::istream& stream)
 {
-    while (!file->eof() && !file->fail()) {
+    std::vector<std::string> input_strings;
+    while (!stream.eof())
+    {
         std::string line;
-        std::getline(*file, line);
+        std::getline(stream, line);
+        if (stream.bad())
+            throw std::runtime_error("Error while reading of stream on DoFilesConversion:ReadStream");
 
-        if (get_key->find(line) == get_key->end()) {
-            (*get_key)[line] = *key;
-            get_string->push_back(line);
-            (*key)++;
+        input_strings.push_back(line);
+    }
+    return input_strings;
+}
+
+inline std::vector<size_t> Integrise(const std::vector<std::string>& strings, 
+    std::map<std::string, size_t>* string_map, 
+    std::vector<std::string>* string_storage,
+    bool init_key = false)
+{
+    static size_t key;
+
+    if (init_key)
+        key = 0;
+
+    std::vector<size_t> result;
+    for (size_t i = 0; i < strings.size(); ++i)
+    {
+        if (string_map->find(strings[i]) == string_map->end()) {
+            (*string_map)[strings[i]] = key;
+            string_storage->push_back(strings[i]);
+            ++key;
         }
 
-        sequence->push_back((*get_key)[line]);
+        result.push_back((*string_map)[strings[i]]);
     }
 
-    if (file->fail() && !file->eof())
-        throw std::runtime_error("Error on ReadFile: Failure reading file");
+    return result;
 }
 
 template <class Iterator>
-void WriteLine(std::ofstream& file, const std::vector<std::string>& get_string,
+void WriteLine(std::ostream& stream, const std::vector<std::string>& string_storage,
     Iterator iterator, std::string addition)
 {
-    file << addition << get_string[*iterator] << std::endl;
+    stream << addition << string_storage[*iterator] << std::endl;
 }
 
-void WriteConversion(std::string filename, const std::vector<size_t>& first_sequence,
+inline void WriteConversion(std::ostream& difference_stream,
+    const std::vector<size_t>& first_sequence,
     const std::vector<size_t>& second_sequence,
     const std::vector<size_t>& subsequence,
-    const std::vector<std::string>& get_string)
+    const std::vector<std::string>& string_storage)
 {
-    std::ofstream file(filename);
-
     auto first_iterator = first_sequence.begin();
     auto second_iterator = second_sequence.begin();
     auto subsequence_iterator = subsequence.begin();
@@ -50,54 +70,56 @@ void WriteConversion(std::string filename, const std::vector<size_t>& first_sequ
 
         if (*first_iterator == *second_iterator
             && *second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "");
-            first_iterator++;
-            second_iterator++;
-            subsequence_iterator++;
+            WriteLine(difference_stream, string_storage, first_iterator, "");
+            ++first_iterator;
+            ++second_iterator;
+            ++subsequence_iterator;
         }
-        else if (*second_iterator == *subsequence_iterator) {
-            WriteLine(file, get_string, first_iterator, "-");
-            first_iterator++;
+        else
+        if (*second_iterator == *subsequence_iterator) {
+            WriteLine(difference_stream, string_storage, first_iterator, "-");
+            ++first_iterator;
         }
         else {
-            WriteLine(file, get_string, second_iterator, "+");
-            second_iterator++;
+            WriteLine(difference_stream, string_storage, second_iterator, "+");
+            ++second_iterator;
         }
     }
 
     if (subsequence_iterator != subsequence.end())
-        throw std::logic_error("WriteConversion: Wrong common subsequence");
+        throw std::runtime_error("WriteConversion: Wrong common subsequence");
 
     while (first_iterator != first_sequence.end()) {
-        WriteLine(file, get_string, first_iterator, "-");
-        first_iterator++;
+        WriteLine(difference_stream, string_storage, first_iterator, "-");
+        ++first_iterator;
     }
 
     while (second_iterator != second_sequence.end()) {
-        WriteLine(file, get_string, second_iterator, "+");
-        second_iterator++;
+        WriteLine(difference_stream, string_storage, second_iterator, "+");
+        ++second_iterator;
     }
 }
 
-void FilesConverison(std::string first_filename, std::string second_filename,
-                     std::string difference_filename)
+inline void DoFilesConverison(std::istream& first_stream, std::istream& second_stream,
+    std::ostream& difference_stream)
 {
-    std::ifstream first_file(first_filename);
-    std::ifstream second_file(second_filename);
-
-    std::map<std::string, size_t> get_key;
-    std::vector<std::string> get_string;
+    std::map<std::string, size_t> string_map;
+    std::vector<std::string> string_storage;
 
     std::vector<size_t> first_sequence;
     std::vector<size_t> second_sequence;
-    size_t key = 0;
 
-    IntegrizeFile(&first_file, &first_sequence, &get_key, &get_string, &key);
-    IntegrizeFile(&second_file, &second_sequence, &get_key, &get_string, &key);
+    {
+        std::vector<std::string> first_string_sequence = ReadStream(first_stream);
+        std::vector<std::string> second_string_sequence = ReadStream(second_stream);
+
+        first_sequence = Integrise(first_string_sequence, &string_map, &string_storage, true);
+        second_sequence = Integrise(second_string_sequence, &string_map, &string_storage);
+    }
 
     std::vector<size_t> common_subsequence =
-        LCSGetSubsequence(first_sequence, second_sequence);
+        FindLongestCommonSubsequence(first_sequence, second_sequence);
 
-    WriteConversion(difference_filename, first_sequence, second_sequence,
-        common_subsequence, get_string);
+    WriteConversion(difference_stream, first_sequence, second_sequence,
+        common_subsequence, string_storage);
 }

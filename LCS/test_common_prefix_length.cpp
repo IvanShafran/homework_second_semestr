@@ -1,5 +1,6 @@
 #include <cstring>
 #include <string>
+#include <algorithm>
 
 #include "random_functions.h"
 #include "longest_common_subsequence.h"
@@ -10,7 +11,7 @@ int GetCPL(std::string first_string, std::string second_string)
         second_string.begin(), second_string.end());
 }
 
-void TestCPL_Simple()
+void TestCommonPrefixLength_Simple()
 {
     if (GetCPL("", "") != 0)
         throw std::runtime_error("Error on TestCommonPrefixLength_Simple #1");
@@ -29,29 +30,18 @@ void TestCPL_Simple()
 
 }
 
-bool CheckCommonPrefix(size_t first_position, size_t second_position,
-    const std::string& first_string, const std::string& second_string,
+bool CheckCommonPrefixLength(const std::string& first_string,
+    const std::string& second_string, 
     int common_prefix_length)
 {
-    if (common_prefix_length < 0 || (first_position + common_prefix_length) > first_string.length()
-        || (second_position + common_prefix_length) > second_string.length())
-        return false;
-
-    if (0 != memcmp(&first_string[first_position],
-                    &second_string[second_position],
-                    common_prefix_length * sizeof(first_string[first_position]))) {
-        return false;
-    }
-
-    if ((first_position + common_prefix_length) < first_string.length()
-        && (second_position + common_prefix_length) < second_string.length()
-        && (first_string[first_position + common_prefix_length] == second_string[second_position + common_prefix_length]))
-        return false;
-
-    return true;
+    return !std::equal(first_string.begin(),
+        first_string.begin() + common_prefix_length, second_string.begin()) ||
+        ((first_string.size() != common_prefix_length) &&
+        (second_string.size() != common_prefix_length) &&
+        (first_string[common_prefix_length] == second_string[common_prefix_length]));
 }
 
-void TestCPL_Random()
+void TestCommonPrefixLength_Random()
 {
     srand(777);
 
@@ -64,19 +54,17 @@ void TestCPL_Random()
         first_string = RandString(first_length, symbol_set);
         second_string = RandString(second_length, symbol_set);
 
-        size_t first_position = Rand(0, first_length);
-        size_t second_position = Rand(0, second_length);
-        int common_prefix_length = CommonPrefixLength(first_string.begin() + first_position, 
-            first_string.end(), second_string.begin() + second_position, second_string.end());
+        int common_prefix_length = CommonPrefixLength(first_string.begin(), 
+            first_string.end(), second_string.begin(), second_string.end());
 
-        if (!CheckCommonPrefix(first_position, second_position,
-            first_string, second_string, common_prefix_length))
+        if (CheckCommonPrefixLength(first_string, second_string, 
+            common_prefix_length))
             throw std::runtime_error("Error on TestCommonStringLength_Random");
     }
 }
 
 void TestCommonPrefixLength()
 {
-    TestCPL_Simple();
-    TestCPL_Random();
+    TestCommonPrefixLength_Simple();
+    TestCommonPrefixLength_Random();
 }

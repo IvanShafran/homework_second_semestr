@@ -8,7 +8,7 @@
 #include "signed_array.h"
 
 template <class Iterator>
-int CommonPrefixLength(Iterator first_begin, Iterator first_end,
+size_t CommonPrefixLength(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end)
 {
     size_t length = 0;
@@ -134,7 +134,7 @@ std::pair<int, int> LCSGetSeparator(int distance,
 }
 
 template <class Sequence, class Iterator>
-Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
+Sequence FindLongestCommonSubsequence(Iterator first_begin, Iterator first_end,
     Iterator second_begin, Iterator second_end, 
     int distance)
 {    
@@ -169,11 +169,12 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
     std::pair<int, int> separator = LCSGetSeparator(distance, first_begin, first_end, 
         second_begin, second_end);
 
-    Sequence begin_part = LCSGetSubsequence<Sequence>(first_begin, first_begin + separator.first,
-        second_begin, second_begin + separator.second, bound_distance);
+    Sequence begin_part = FindLongestCommonSubsequence<Sequence>(first_begin, 
+        first_begin + separator.first, second_begin, second_begin + separator.second, 
+        bound_distance);
 
-    Sequence end_part = LCSGetSubsequence<Sequence>(first_begin + separator.first, first_end,
-        second_begin + separator.second, second_end, distance - bound_distance);
+    Sequence end_part = FindLongestCommonSubsequence<Sequence>(first_begin + separator.first, 
+        first_end, second_begin + separator.second, second_end, distance - bound_distance);
 
     result.insert(result.end(), begin_part.begin(), begin_part.end());
     result.insert(result.end(), end_part.begin(), end_part.end());
@@ -181,10 +182,10 @@ Sequence LCSGetSubsequence(Iterator first_begin, Iterator first_end,
 }
 
 template <class Sequence>
-Sequence LCSGetSubsequence(const Sequence& first_sequence, const Sequence& second_sequence)
+Sequence FindLongestCommonSubsequence(const Sequence& first_sequence, const Sequence& second_sequence)
 {
     int distance = LCSDistance(first_sequence, second_sequence);
 
-    return LCSGetSubsequence<Sequence>
+    return FindLongestCommonSubsequence<Sequence>
         (first_sequence.begin(), first_sequence.end(), second_sequence.begin(), second_sequence.end(), distance);
 }

@@ -1,34 +1,37 @@
 #include <iostream>
-#include <stdexcept>
-#include "files_conversion.h"
 
-void Usage()
-{
-    std::cerr << "Usage: first_filename, second_filename, conversin_filename(conversion.txt by default)" << std::endl;
-    std::exit(-1);
-}
+#include "test_longest_common_subsequence_distance.h"
+#include "test_longest_common_substring_distance.h"
+#include "test_common_prefix_length.h"
+#include "test_find_longest_common_substring.h"
+#include "test_files_conversion.h"
+#include "test_files_conversion_by_file.h"
+#include "test_signed_array.h"
 
-void GetDifference(std::string first_filename, std::string second_filename,
-                   std::string difference_filename = "conversion.txt")
-{
-    FilesConverison(first_filename, second_filename, difference_filename);
-}
-
-int main(int argc, const char** argv)
-{
+int main()
+{       
     std::ios_base::sync_with_stdio(false);
-
-    if (argc == 3) {
-        GetDifference(static_cast<std::string>(argv[1]), static_cast<std::string>(argv[2]));
+    try {
+        TestCommonPrefixLength();
+        std::cout << "TestCommonPrefixLength OK" << std::endl;
+        TestLCSubstringDistance();
+        std::cout << "TestLCSubstringDistance OK" << std::endl;
+        TestLCSubsequenceDistance();
+        std::cout << "TestLCSubsequenceDistance OK" << std::endl;
+        TestFindLongestCommonSubsequence();
+        std::cout << "TestFindLongestCommonSubsequence OK" << std::endl;
+        TestFilesConversion();
+        std::cout << "TestFilesConversion OK" << std::endl;
+        TestFilesConversionByFile();
+        std::cout << "TestFilesConversionByFiles OK" << std::endl;
+        TestSignedArray();
+        std::cout << "TestSignedArray OK" << std::endl;
+        system("PAUSE");
+        return 0;
     }
-    else
-    if (argc == 4) {
-        GetDifference(static_cast<std::string>(argv[1]), static_cast<std::string>(argv[2]), 
-            static_cast<std::string>(argv[3]));
+    catch (const std::exception& ex) {
+        std::cerr << "Exception: " << ex.what() << std::endl;
+        system("PAUSE");
+        return -1;
     }
-    else {
-        Usage();
-    }
-
-    return 0;
 }

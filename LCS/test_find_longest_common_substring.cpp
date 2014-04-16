@@ -3,30 +3,30 @@
 #include "longest_common_subsequence.h"
 #include "random_functions.h"
 
-void TestLCSGetSubstring_Simple()
+void TestFindLongestCommonSubsequence_Simple()
 {
-    if (LCSGetSubsequence<std::string>("a", "b") != "")
+    if (FindLongestCommonSubsequence<std::string>("a", "b") != "")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #0");
 
-    if (LCSGetSubsequence<std::string>("a", "a") != "a")
+    if (FindLongestCommonSubsequence<std::string>("a", "a") != "a")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #1");
 
-    if (LCSGetSubsequence<std::string>("ba", "aba") != "ba")
+    if (FindLongestCommonSubsequence<std::string>("ba", "aba") != "ba")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #2");
 
-    if (LCSGetSubsequence<std::string>("aba", "aba") != "aba")
+    if (FindLongestCommonSubsequence<std::string>("aba", "aba") != "aba")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #3");
     
-    if (LCSGetSubsequence<std::string>("abracadabra", "abacaba") != "abacaba")
+    if (FindLongestCommonSubsequence<std::string>("abracadabra", "abacaba") != "abacaba")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #4");
     
-    if (LCSGetSubsequence<std::string>("avadakedavra", "abacaba") != "aaaa")
+    if (FindLongestCommonSubsequence<std::string>("avadakedavra", "abacaba") != "aaaa")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #5");
 
-    if (LCSGetSubsequence<std::string>("03.03.2014", "10:38") != "03")
+    if (FindLongestCommonSubsequence<std::string>("03.03.2014", "10:38") != "03")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #6");
 
-    if (LCSGetSubsequence<std::string>("abacaba", "ttatttbattttctttattbttatt") 
+    if (FindLongestCommonSubsequence<std::string>("abacaba", "ttatttbattttctttattbttatt")
         != "abacaba")
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #7");
 }
@@ -58,7 +58,7 @@ bool Check(std::string& first_string, std::string& second_string, std::string su
 
 }
 
-void TestLCSGetSubstring_Random()
+void TestFindLongestCommonSubsequence_Random()
 {
     srand(777);
     for (int count = 0; count < 100; count++) {
@@ -67,14 +67,15 @@ void TestLCSGetSubstring_Random()
         std::string symbol_set = "abcdefghijklmnopqrstuvwxyz";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
-        std::string result = LCSGetSubsequence<std::string>(first_string, second_string);
+        std::string result = FindLongestCommonSubsequence<std::string>(first_string, 
+            second_string);
 
         if (!Check(first_string, second_string, result))
             throw std::runtime_error("Error: TestLCSGetSubstring_Random");
     }
 }
 
-void TestLCSGetSubstring_BigTest()
+void TestFindLongestCommonSubsequence_BigTest()
 {
     srand(777);
     for (int count = 0; count < 3; count++) {
@@ -84,16 +85,17 @@ void TestLCSGetSubstring_BigTest()
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
-        std::string result = LCSGetSubsequence<std::string>(first_string, second_string);
+        std::string result = FindLongestCommonSubsequence<std::string>(first_string, 
+            second_string);
 
         if (!Check(first_string, second_string, result))
             throw std::runtime_error("Error: TestLCSGetSubstring_BigTest");
     }
 }
 
-void TestLCSGetSubstring()
+void TestFindLongestCommonSubsequence()
 {
-    TestLCSGetSubstring_Simple();
-    TestLCSGetSubstring_Random();
-    TestLCSGetSubstring_BigTest();
+    TestFindLongestCommonSubsequence_Simple();
+    TestFindLongestCommonSubsequence_Random();
+    TestFindLongestCommonSubsequence_BigTest();
 }

@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <iostream>
+#include <sstream>
 
 inline int Rand(int begin, int end)
 {
@@ -43,15 +45,13 @@ std::vector<T> RandVector(int size, const std::vector<T>& element_set)
     return result;
 }
 
-inline void RandFile(std::string file_name, int size, int min_length, int max_length, std::string symbol_set)
+inline void RandStream(std::ostream& stream, int size, int min_length, int max_length, std::string symbol_set)
 {
     if (size < 0)
         throw std::runtime_error("Size is not valid");
 
-    std::ofstream file(file_name);
-
     for (int i = 0; i < size; i++) {
         int length = Rand(min_length, max_length + 1);
-        file << RandString(length, symbol_set) << std::endl;
+        stream << RandString(length, symbol_set) << std::endl;
     }
 }
