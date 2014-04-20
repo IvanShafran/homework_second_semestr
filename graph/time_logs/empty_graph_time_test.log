@@ -1,10 +1,11 @@
+Time used by DFS on empty_graph with 0 vertices and 0 edges is 0ms
+Time used by DFS on empty_graph with 500 vertices and 0 edges is 0ms
 Time used by DFS on empty_graph with 1000 vertices and 0 edges is 0ms
+Time used by DFS on empty_graph with 1500 vertices and 0 edges is 0ms
 Time used by DFS on empty_graph with 2000 vertices and 0 edges is 0ms
+Time used by DFS on empty_graph with 2500 vertices and 0 edges is 0ms
 Time used by DFS on empty_graph with 3000 vertices and 0 edges is 0ms
+Time used by DFS on empty_graph with 3500 vertices and 0 edges is 0ms
 Time used by DFS on empty_graph with 4000 vertices and 0 edges is 0ms
+Time used by DFS on empty_graph with 4500 vertices and 0 edges is 0ms
 Time used by DFS on empty_graph with 5000 vertices and 0 edges is 0ms
-Time used by DFS on empty_graph with 6000 vertices and 0 edges is 0ms
-Time used by DFS on empty_graph with 7000 vertices and 0 edges is 0ms
-Time used by DFS on empty_graph with 8000 vertices and 0 edges is 0ms
-Time used by DFS on empty_graph with 9000 vertices and 0 edges is 0ms
-Time used by DFS on empty_graph with 10000 vertices and 0 edges is 0ms

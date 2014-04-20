@@ -1,5 +1,11 @@
-Time used by DFS on full_graph with 1000 vertices and 999000 edges is 94ms
-Time used by DFS on full_graph with 2000 vertices and 3998000 edges is 235ms
-Time used by DFS on full_graph with 3000 vertices and 8997000 edges is 469ms
-Time used by DFS on full_graph with 4000 vertices and 15996000 edges is 735ms
+Time used by DFS on full_graph with 0 vertices and 0 edges is 0ms
+Time used by DFS on full_graph with 500 vertices and 249500 edges is 47ms
+Time used by DFS on full_graph with 1000 vertices and 999000 edges is 93ms
+Time used by DFS on full_graph with 1500 vertices and 2248500 edges is 172ms
+Time used by DFS on full_graph with 2000 vertices and 3998000 edges is 250ms
+Time used by DFS on full_graph with 2500 vertices and 6247500 edges is 375ms
+Time used by DFS on full_graph with 3000 vertices and 8997000 edges is 437ms
+Time used by DFS on full_graph with 3500 vertices and 12246500 edges is 531ms
+Time used by DFS on full_graph with 4000 vertices and 15996000 edges is 719ms
+Time used by DFS on full_graph with 4500 vertices and 20245500 edges is 844ms
 Time used by DFS on full_graph with 5000 vertices and 24995000 edges is 969ms

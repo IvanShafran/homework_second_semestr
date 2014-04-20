@@ -1,66 +1,61 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "graph.h"
 #include "dfs.h"
 
-class TopologicalSortClass
-{
+class TopologicalSortClass : AbstractDFSUserClass {
     size_t number_of_vertices_;
     size_t position_;
-    std::vector<size_t> order_;
+    std::vector<size_t> topological_order_;
     bool graph_has_cyclic_;
 
 public:
-    TopologicalSortClass(size_t number_of_vertices) : 
+    explicit TopologicalSortClass(size_t number_of_vertices) : 
         position_(number_of_vertices - 1), 
         number_of_vertices_(number_of_vertices),
         graph_has_cyclic_(false)
     {
-        order_.resize(number_of_vertices);
+        topological_order_.resize(number_of_vertices);
     }
 
-    bool DoesGraphHaveCyclic()
+    bool GraphHasCyclic()
     {
         return graph_has_cyclic_;
     }
 
-    std::vector<size_t> GetOrder()
+    std::vector<size_t> GetTopologicalOrder()
     {
-        return order_;
+        return topological_order_;
     }
 
     void BeforeProcessing(size_t vertex)
     {}
 
-    void ProcessWhiteVertex(size_t edge_begin, size_t edge_end)
-    {}
-
-    void ProcessGreyVertex(size_t edge_begin, size_t edge_end)
+    void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color)
     {
-        graph_has_cyclic_ = true;
+        if (end_color == GREY)
+            graph_has_cyclic_ = true;
     }
-
-    void ProcessBlackVertex(size_t edge_begin, size_t edge_end)
-    {}
 
     void AfterProcessing(size_t vertex)
     {
-        order_[position_] = vertex;
+        topological_order_[position_] = vertex;
         --position_;
     }
 };
 
-std::vector<size_t> TopologicalSort(const Graph& graph, bool* graph_has_cyclic)
+std::vector<size_t> TopologicalSort(const std::unique_ptr<Graph>& graph, bool* graph_has_cyclic)
 {
-    TopologicalSortClass user_class(graph.GetNumberOfVertices());
-    DFS<TopologicalSortClass>(graph, &user_class);
+    TopologicalSortClass topological_sort_class(graph->GetNumberOfVertices());
+    DFS(graph, &topological_sort_class);
     
-    *graph_has_cyclic = user_class.DoesGraphHaveCyclic();
+    *graph_has_cyclic = topological_sort_class.GraphHasCyclic();
 
-    if (user_class.DoesGraphHaveCyclic())
+    if (topological_sort_class.GraphHasCyclic())
         return std::vector<size_t>({});
     else
-        return user_class.GetOrder();
+        return topological_sort_class.GetTopologicalOrder();
 }
