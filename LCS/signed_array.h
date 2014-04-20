@@ -43,7 +43,9 @@ public:
         return array_.size();
     }
 
-    std::vector<T> GetData()
+    std::vector<T> GetData() // @review: Естественнее было бы вернуть константную ссылку на поле объекта.
+                             // @review: Тогда по умолчанию не будет копирования значения.
+                             // @review: И ещё можно сделать этот метод константным.
     {
         return array_;
     }
@@ -66,7 +68,8 @@ public:
         return array_.at(GetIndex(index));
     }
 
-    void operator= (const std::vector<T>& vector)
+    void operator= (const std::vector<T>& vector) // @review: Лучше сделать метод с говорящим названием.
+                                                  // @review: Оператор присваивания обычно возвращает ссылку на сам объект.
     {
         if (vector.size() != array_.size())
             throw std::runtime_error("Error on operator= SignedArray: wrong size of vector");
