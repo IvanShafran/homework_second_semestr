@@ -27,7 +27,10 @@ inline std::vector<size_t> Integrise(const std::vector<std::string>& strings,
     std::vector<std::string>* string_storage,
     bool init_key = false)
 {
-    static size_t key;
+    static size_t key; // @review: Статические переменные здесь не нужны, как и флаг init_key. Присмотритесь, 
+                       // @review: у вас уже есть необходимый счётчик в нескольких переменных.
+                       // @review: В промышленном программировании также стоит избегать статических изменяемых переменных.
+                       // @review: Подобные переменные мешают многопоточному программированию.
 
     if (init_key)
         key = 0;
@@ -48,8 +51,10 @@ inline std::vector<size_t> Integrise(const std::vector<std::string>& strings,
 }
 
 template <class Iterator>
-void WriteLine(std::ostream& stream, const std::vector<std::string>& string_storage,
-    Iterator iterator, std::string addition)
+void WriteLine(std::ostream& stream, const std::vector<std::string>& string_storage, // @review: Интерфейс этой функции получился очень сложным:
+    Iterator iterator,                                                               // @review: Здесь и поток, и вектор, и итератор. Стороннему
+                                                                                     // @review:  читателю будет сложно понять, как же ей пользоваться.
+    std::string addition) // @review: Составные объекты лучше принимать по константной ссылке.
 {
     stream << addition << string_storage[*iterator] << std::endl;
 }

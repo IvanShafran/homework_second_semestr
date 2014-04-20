@@ -2,12 +2,16 @@
 
 template <class Sequence>
 int VagnerFisher(const Sequence& first_vector, const Sequence& second_vector)
+// @review: В названии функции стоит отразить. что она делает. Тогда читателю не придётся
+// @review: искать описание алгоритма, чтобы выяснить его назначение.
 {
     int first_size = first_vector.size();
     int second_size = second_vector.size();
     std::vector<int> previous_line;
 
     for (int i = 0; i <= first_size; i++) {
+        // @review: Однобуквенные переменных подходят для коротких циклов без вложений.
+        // @review: В более сложных циклах лучше пользоваться более подробными названиями.
         std::vector<int> line;
         for (int j = 0; j <= second_size; j++)
         if (j == 0 || i == 0) {
