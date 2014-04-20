@@ -31,7 +31,7 @@ void TestFindLongestCommonSubsequence_Simple()
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #7");
 }
 
-bool CheckSubsequence(std::string& string, std::string& substring)
+bool CheckSubsequence(std::string& string, std::string& substring)  // @review: Объекты которые не планируется менять лучше принимать по константной ссылке.
 {
     int position = 0;
     for (size_t i = 0; i < string.size(); i++)
@@ -44,6 +44,7 @@ bool CheckSubsequence(std::string& string, std::string& substring)
         return true;
 }
 
+// @review: Check -- слишком общее название для функции.
 bool Check(std::string& first_string, std::string& second_string, std::string substring)
 {
     int distance = LCSDistance(first_string, second_string);
@@ -68,7 +69,7 @@ void TestFindLongestCommonSubsequence_Random()
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
         std::string result = FindLongestCommonSubsequence<std::string>(first_string, 
-            second_string);
+            second_string); // @review: Result не лучшее название для этой переменной.
 
         if (!Check(first_string, second_string, result))
             throw std::runtime_error("Error: TestLCSGetSubstring_Random");
