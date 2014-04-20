@@ -34,11 +34,11 @@ bool CheckCommonPrefixLength(const std::string& first_string,
     const std::string& second_string, 
     int common_prefix_length)
 {
-    return !std::equal(first_string.begin(),
-        first_string.begin() + common_prefix_length, second_string.begin()) ||
+    // @review: Хорошо бы проверить, что common_prefix_length не входит за границы строк.
+    return !std::equal(first_string.begin(), first_string.begin() + common_prefix_length, second_string.begin()) ||
         ((first_string.size() != common_prefix_length) &&
-        (second_string.size() != common_prefix_length) &&
-        (first_string[common_prefix_length] == second_string[common_prefix_length]));
+         (second_string.size() != common_prefix_length) &&
+         (first_string[common_prefix_length] == second_string[common_prefix_length]));
 }
 
 void TestCommonPrefixLength_Random()
