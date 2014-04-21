@@ -15,7 +15,8 @@ void TestLCSubsequenceDistance_Random()
         std::vector<int> first_vector = RandVector(first_size, element_set);
         std::vector<int> second_vector = RandVector(second_size, element_set);
 
-        if (LCSDistance(first_vector, second_vector) != VagnerFisher(first_vector, second_vector))
+        if (LCSDistance(first_vector, second_vector) != 
+            GetCLongestCommonSubsequenceByVagnerFisherAlgo(first_vector, second_vector))
             throw std::runtime_error("Error: TestLCSubsequenceDistance_Random");
 
     }

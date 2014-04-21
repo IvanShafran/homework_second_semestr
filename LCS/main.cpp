@@ -14,6 +14,8 @@ int main()
     try {
         TestCommonPrefixLength();
         std::cout << "TestCommonPrefixLength OK" << std::endl;
+        TestSignedArray();
+        std::cout << "TestSignedArray OK" << std::endl;
         TestLCSubstringDistance();
         std::cout << "TestLCSubstringDistance OK" << std::endl;
         TestLCSubsequenceDistance();
@@ -24,8 +26,6 @@ int main()
         std::cout << "TestFilesConversion OK" << std::endl;
         TestFilesConversionByFile();
         std::cout << "TestFilesConversionByFiles OK" << std::endl;
-        TestSignedArray();
-        std::cout << "TestSignedArray OK" << std::endl;
         system("PAUSE");
         return 0;
     }

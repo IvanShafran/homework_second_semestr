@@ -43,7 +43,7 @@ public:
         return array_.size();
     }
 
-    std::vector<T> GetData()
+    const std::vector<T>& GetData() const
     {
         return array_;
     }
@@ -66,7 +66,7 @@ public:
         return array_.at(GetIndex(index));
     }
 
-    void operator= (const std::vector<T>& vector)
+    void SetData(const std::vector<T>& vector)
     {
         if (vector.size() != array_.size())
             throw std::runtime_error("Error on operator= SignedArray: wrong size of vector");

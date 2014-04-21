@@ -24,21 +24,14 @@ inline std::vector<std::string> ReadStream(std::istream& stream)
 
 inline std::vector<size_t> Integrise(const std::vector<std::string>& strings, 
     std::map<std::string, size_t>* string_map, 
-    std::vector<std::string>* string_storage,
-    bool init_key = false)
+    std::vector<std::string>* string_storage)
 {
-    static size_t key;
-
-    if (init_key)
-        key = 0;
-
     std::vector<size_t> result;
     for (size_t i = 0; i < strings.size(); ++i)
     {
         if (string_map->find(strings[i]) == string_map->end()) {
-            (*string_map)[strings[i]] = key;
+            (*string_map)[strings[i]] = string_map->size();
             string_storage->push_back(strings[i]);
-            ++key;
         }
 
         result.push_back((*string_map)[strings[i]]);
@@ -47,11 +40,10 @@ inline std::vector<size_t> Integrise(const std::vector<std::string>& strings,
     return result;
 }
 
-template <class Iterator>
-void WriteLine(std::ostream& stream, const std::vector<std::string>& string_storage,
-    Iterator iterator, std::string addition)
+inline void WriteLine(std::ostream& stream, const std::string& addition,
+    const std::string& line)
 {
-    stream << addition << string_storage[*iterator] << std::endl;
+    stream << addition << line << std::endl;
 }
 
 inline void WriteConversion(std::ostream& difference_stream,
@@ -70,18 +62,18 @@ inline void WriteConversion(std::ostream& difference_stream,
 
         if (*first_iterator == *second_iterator
             && *second_iterator == *subsequence_iterator) {
-            WriteLine(difference_stream, string_storage, first_iterator, "");
+            WriteLine(difference_stream, "", string_storage[*first_iterator]);
             ++first_iterator;
             ++second_iterator;
             ++subsequence_iterator;
         }
         else
         if (*second_iterator == *subsequence_iterator) {
-            WriteLine(difference_stream, string_storage, first_iterator, "-");
+            WriteLine(difference_stream, "-", string_storage[*first_iterator]);
             ++first_iterator;
         }
         else {
-            WriteLine(difference_stream, string_storage, second_iterator, "+");
+            WriteLine(difference_stream, "+", string_storage[*second_iterator]);
             ++second_iterator;
         }
     }
@@ -90,12 +82,12 @@ inline void WriteConversion(std::ostream& difference_stream,
         throw std::runtime_error("WriteConversion: Wrong common subsequence");
 
     while (first_iterator != first_sequence.end()) {
-        WriteLine(difference_stream, string_storage, first_iterator, "-");
+        WriteLine(difference_stream, "-", string_storage[*first_iterator]);
         ++first_iterator;
     }
 
     while (second_iterator != second_sequence.end()) {
-        WriteLine(difference_stream, string_storage, second_iterator, "+");
+        WriteLine(difference_stream, "+", string_storage[*second_iterator]);
         ++second_iterator;
     }
 }
@@ -113,7 +105,7 @@ inline void DoFilesConverison(std::istream& first_stream, std::istream& second_s
         std::vector<std::string> first_string_sequence = ReadStream(first_stream);
         std::vector<std::string> second_string_sequence = ReadStream(second_stream);
 
-        first_sequence = Integrise(first_string_sequence, &string_map, &string_storage, true);
+        first_sequence = Integrise(first_string_sequence, &string_map, &string_storage);
         second_sequence = Integrise(second_string_sequence, &string_map, &string_storage);
     }
 

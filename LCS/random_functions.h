@@ -45,7 +45,7 @@ std::vector<T> RandVector(int size, const std::vector<T>& element_set)
     return result;
 }
 
-inline void RandStream(std::ostream& stream, int size, int min_length, int max_length, std::string symbol_set)
+inline void RandStream(std::ostream& stream, int size, int min_length, int max_length, const std::string& symbol_set)
 {
     if (size < 0)
         throw std::runtime_error("Size is not valid");

@@ -5,13 +5,13 @@
 #include "random_functions.h"
 #include "longest_common_subsequence.h"
 
-int GetCPL(std::string first_string, std::string second_string)
+int GetCPL(const std::string& first_string, const std::string& second_string)
 {
     return CommonPrefixLength(first_string.begin(), first_string.end(),
         second_string.begin(), second_string.end());
 }
 
-void TestCommonPrefixLength_Simple()
+void TestCommonPrefixLength_Unit()
 {
     if (GetCPL("", "") != 0)
         throw std::runtime_error("Error on TestCommonPrefixLength_Simple #1");
@@ -57,14 +57,15 @@ void TestCommonPrefixLength_Random()
         int common_prefix_length = CommonPrefixLength(first_string.begin(), 
             first_string.end(), second_string.begin(), second_string.end());
 
-        if (CheckCommonPrefixLength(first_string, second_string, 
-            common_prefix_length))
+        if (first_length < common_prefix_length || second_length < common_prefix_length || 
+            CheckCommonPrefixLength(first_string, second_string, 
+                common_prefix_length))
             throw std::runtime_error("Error on TestCommonStringLength_Random");
     }
 }
 
 void TestCommonPrefixLength()
 {
-    TestCommonPrefixLength_Simple();
+    TestCommonPrefixLength_Unit();
     TestCommonPrefixLength_Random();
 }

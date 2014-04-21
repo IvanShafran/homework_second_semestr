@@ -31,7 +31,7 @@ void TestFindLongestCommonSubsequence_Simple()
         throw std::runtime_error("Error: TestLCSGetSubsequence_Simple #7");
 }
 
-bool CheckSubsequence(std::string& string, std::string& substring)
+bool CheckSubsequence(const std::string& string, const std::string& substring)
 {
     int position = 0;
     for (size_t i = 0; i < string.size(); i++)
@@ -44,7 +44,8 @@ bool CheckSubsequence(std::string& string, std::string& substring)
         return true;
 }
 
-bool Check(std::string& first_string, std::string& second_string, std::string substring)
+bool CheckLongestCommonSubstring(const std::string& first_string, const std::string& second_string,
+    const std::string& substring)
 {
     int distance = LCSDistance(first_string, second_string);
 
@@ -67,10 +68,10 @@ void TestFindLongestCommonSubsequence_Random()
         std::string symbol_set = "abcdefghijklmnopqrstuvwxyz";
         std::string first_string = RandString(first_length, symbol_set);
         std::string second_string = RandString(second_length, symbol_set);
-        std::string result = FindLongestCommonSubsequence<std::string>(first_string, 
+        std::string substring = FindLongestCommonSubsequence<std::string>(first_string, 
             second_string);
 
-        if (!Check(first_string, second_string, result))
+        if (!CheckLongestCommonSubstring(first_string, second_string, substring))
             throw std::runtime_error("Error: TestLCSGetSubstring_Random");
     }
 }
@@ -88,7 +89,7 @@ void TestFindLongestCommonSubsequence_BigTest()
         std::string result = FindLongestCommonSubsequence<std::string>(first_string, 
             second_string);
 
-        if (!Check(first_string, second_string, result))
+        if (!CheckLongestCommonSubstring(first_string, second_string, result))
             throw std::runtime_error("Error: TestLCSGetSubstring_BigTest");
     }
 }
