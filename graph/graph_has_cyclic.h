@@ -7,7 +7,7 @@
 /** @review:
  *  Как правило чем меньше кода и чем он проще, тем лучше:
  * 
- *  struct CyclicSearchClass : public DefaultDFSUserClass {
+ *  struct CycleSearchClass : public DefaultDFSUserClass {
  *    bool graph_has_cyclic = false;
  *
  *    void ProcessEdge(size_t, size_t, colors end_color)
