@@ -18,7 +18,9 @@ public:
     }
 
     void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color)
-    {}
+    {
+        // @review: Здесь можно проверить, что ваше знание о цвете вершины не противоречит с end_color.
+    }
 
     void AfterProcessing(size_t vertex)
     {
@@ -46,7 +48,8 @@ void DFSUnitTestSecond()
 
 }
 
-void DFSUnitTestThird()
+void DFSUnitTestThird() // @review: Этот тест аналогичен предыдущему.
+                        // @review: Общую часть стоит вынести в отдельную функцию.
 {
     std::unique_ptr<Graph> graph = MakeCompactGraph(5, {0, 1, 2, 3, 1}, {1, 2, 3, 1, 3});
 
