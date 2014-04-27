@@ -3,7 +3,22 @@
 #include "graph.h"
 #include "dfs.h"
 
-class CyclicSearchClass : AbstractDFSUserClass {
+
+/** @review:
+ *  Как правило чем меньше кода и чем он проще, тем лучше:
+ * 
+ *  struct CycleSearchClass : public DefaultDFSUserClass {
+ *    bool graph_has_cyclic = false;
+ *
+ *    void ProcessEdge(size_t, size_t, colors end_color)
+ *    {
+ *      if (end_color == GREY)
+ *        graph_has_cyclic = true;
+ *    }
+ *  };
+ */
+
+class CyclicSearchClass : AbstractDFSUserClass { // @review: Private наследование ничего вам не даёт.
     bool graph_has_cyclic_;
 public:
     CyclicSearchClass() : graph_has_cyclic_(false)

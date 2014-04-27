@@ -14,14 +14,21 @@ public:
 
     void BeforeProcessing(size_t vertex)
     {
+        // @review: Здесь можно проверить, что вершина ещё белая.
         color_[vertex] = GREY;
     }
 
     void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color)
-    {}
+    {
+        // @review: Здесь можно проверить, что edge_begin -- серая, 
+        // @review: что знания о цвете edge_end не противоречат end_color.
+        // @review: А также, что (edge_begin, edge_end) -- является ребром графа
+        // @review: (и что поиск просматривает в конечном счёте все рёбра).
+    }
 
     void AfterProcessing(size_t vertex)
     {
+        // @review: Здесь можно проверить, что вершина уже чёрная.
         color_[vertex] = BLACK;
     }
 };
@@ -46,7 +53,10 @@ void DFSUnitTestSecond()
 
 }
 
-void DFSUnitTestThird()
+void DFSUnitTestThird() // @review: Этот тест аналогичен предыдущему.
+                        // @review: Общую часть стоит вынести в отдельную функцию.
+                        // @review: А потом позвать эту функцию для разных графов.
+                        // @review: (у вас даже есть функции для генерации случайных графов).
 {
     std::unique_ptr<Graph> graph = MakeCompactGraph(5, {0, 1, 2, 3, 1}, {1, 2, 3, 1, 3});
 

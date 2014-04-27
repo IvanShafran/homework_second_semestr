@@ -16,8 +16,17 @@
 */
 
 namespace {
+    
+    // @review: Imho, следующие функции были бы удобнее:
+    // @review:   std::vector<Edge> generateFullGraphEdges(size_t number_of_vertices);
+    // @review:   std::vector<Edge> generateGraphEdges(size_t number_of_vertices, size_t number_of_edges);
+    // @review:   std::vector<Edge> generateAcyclicGraphEdges(size_t number_of_vertices, size_t number_of_edges);
+    // @review:   ...
+    
+    // @review: Для чего здесь number_of_edges? Можно взять размер у edge_begin.
     void GenFullGraphEdges(size_t number_of_vertices, size_t* number_of_edges,
         std::vector<size_t>* edge_begin, std::vector<size_t>* edge_end)
+        
     {
         *number_of_edges = 0;
 
@@ -56,7 +65,7 @@ namespace {
     void GenRandomGraphEdges(size_t number_of_vertices, size_t* number_of_edges,
         std::vector<size_t>* edge_begin, std::vector<size_t>* edge_end)
     {
-        size_t approximate_number_of_edges = 4 * number_of_vertices;
+        size_t approximate_number_of_edges = 4 * number_of_vertices; // @review: Не очень понятно, откуда взялась эта величина.
 
         std::set<Edge> edges;
 
@@ -91,6 +100,8 @@ namespace {
     void GenFunctionalGraphEdges(size_t number_of_vertices, size_t* number_of_edges,
         std::vector<size_t>* edge_begin, std::vector<size_t>* edge_end)
     {
+        // @review: Можно же существенно проще: просто сгенерировать подстановку (вектор случайных чисел).
+
         size_t number_of_incidence_vertices =
             Rand(1, std::min<size_t>(number_of_vertices - 1, static_cast<size_t>(10)));
 

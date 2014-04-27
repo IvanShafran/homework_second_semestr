@@ -6,6 +6,28 @@
 #include "graph.h"
 #include "dfs.h"
 
+/** @review:
+ * Как правило чем проще код, тем лучше:
+ * 
+ * struct TopologicalSortClass : public DefaultDFSUserClass {
+ *   std::vector<size_t> reversed_topological_order;
+ *   bool graph_has_cyclic;
+ * 
+ *   TopologicalSortClass() : graph_has_cyclic(false)
+ *   { }
+ *
+ *   void ProcessEdge(size_t, size_t, colors end_color)
+ *   {
+ *       if (end_color == GREY)
+ *           graph_has_cyclic_ = true;
+ *   }
+ *
+ *   void AfterProcessing(size_t vertex)
+ *   {
+ *       reversed_topological_order.push_back(vertex);
+ *   }
+ * };
+ */
 class TopologicalSortClass : AbstractDFSUserClass {
     size_t number_of_vertices_;
     size_t position_;
@@ -21,12 +43,12 @@ public:
         topological_order_.resize(number_of_vertices);
     }
 
-    bool GraphHasCyclic()
+    bool GraphHasCyclic() // @review: const
     {
         return graph_has_cyclic_;
     }
 
-    std::vector<size_t> GetTopologicalOrder()
+    /* const */ std::vector<size_t> /* & */ GetTopologicalOrder()
     {
         return topological_order_;
     }
@@ -55,7 +77,7 @@ std::vector<size_t> TopologicalSort(const std::unique_ptr<Graph>& graph, bool* g
     *graph_has_cyclic = topological_sort_class.GraphHasCyclic();
 
     if (topological_sort_class.GraphHasCyclic())
-        return std::vector<size_t>({});
+        return std::vector<size_t>({});  // @review: В таком случае естественнее бросить исключение.
     else
         return topological_sort_class.GetTopologicalOrder();
 }
