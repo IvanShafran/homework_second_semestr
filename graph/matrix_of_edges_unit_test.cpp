@@ -40,7 +40,7 @@ void TestNumbersOfVerticesMatrixOfEdges()
     std::unique_ptr<Graph> graph2 = MakeCompactGraph(7, edge_begin, edge_end);
     std::unique_ptr<Graph> graph3 = MakeCompactGraph(100, edge_begin, edge_end);
     std::unique_ptr<Graph> graph4 = MakeCompactGraph(1000, edge_begin, edge_end);
-    // @review: Из названия метода можно предположить. что тестируется MatrixOfEdges. Но при этом вызывается
+    // @review: Из названия метода можно предположить, что тестируется MatrixOfEdges. Но при этом вызывается
     // @review: функция MakeCompactGraph(). Это очень странно!
     // @review: По идее, вы должены пользоваться конструктором тестируемого класса напрямую.
 
