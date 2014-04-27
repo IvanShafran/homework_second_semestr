@@ -8,9 +8,11 @@
 #include "graph_generate.h"
 
 void CheckTopologicalSort(const std::unique_ptr<Graph>& graph)
+// @review: Как правило лучше передавать не константную ссылку на умный указатель, а ссылку на сам объект.
 {
-    bool graph_has_cyclic;
+    bool graph_has_cyclic; // @review: cycle или contour
     std::vector<size_t> topological_vertex_order = TopologicalSort(graph, &graph_has_cyclic);
+    // @review: Если функция вернёт список с повторяющимися вершинами, то это удастся отследить?
 
     if (graph_has_cyclic != DoesGraphHaveCyclic(graph))
         throw std::runtime_error("Error on TopologicalSortRandomTest");
@@ -21,6 +23,8 @@ void CheckTopologicalSort(const std::unique_ptr<Graph>& graph)
     std::vector<size_t> topological_vertex_index(graph->GetNumberOfVertices());
     for (size_t vertex_index = 0; vertex_index < graph->GetNumberOfVertices(); ++vertex_index)
         topological_vertex_index[topological_vertex_order[vertex_index]] = vertex_index;
+        // @review: В тестах как правило лучше пользоваться .at(). Если функция вернёт странное значение,
+        // @review: то можно будет это отловить.
 
 
     for (size_t vertex = 0; vertex < graph->GetNumberOfVertices(); ++vertex) {
