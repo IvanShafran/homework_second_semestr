@@ -50,6 +50,8 @@ void DFSUnitTestSecond()
 
 void DFSUnitTestThird() // @review: Этот тест аналогичен предыдущему.
                         // @review: Общую часть стоит вынести в отдельную функцию.
+                        // @review: А потом позвать эту функцию для разных графов.
+                        // @review: (у вас даже есть функции для генерации случайных графов).
 {
     std::unique_ptr<Graph> graph = MakeCompactGraph(5, {0, 1, 2, 3, 1}, {1, 2, 3, 1, 3});
 
