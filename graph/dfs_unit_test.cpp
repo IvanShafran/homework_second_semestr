@@ -14,16 +14,21 @@ public:
 
     void BeforeProcessing(size_t vertex)
     {
+        // @review: Здесь можно проверить, что вершина ещё белая.
         color_[vertex] = GREY;
     }
 
     void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color)
     {
-        // @review: Здесь можно проверить, что ваше знание о цвете вершины не противоречит с end_color.
+        // @review: Здесь можно проверить, что edge_begin -- серая, 
+        // @review: что знания о цвете edge_end не противоречат end_color.
+        // @review: А также, что (edge_begin, edge_end) -- является ребром графа
+        // @review: (и что поиск просматривает в конечном счёте все рёбра).
     }
 
     void AfterProcessing(size_t vertex)
     {
+        // @review: Здесь можно проверить, что вершина уже чёрная.
         color_[vertex] = BLACK;
     }
 };
