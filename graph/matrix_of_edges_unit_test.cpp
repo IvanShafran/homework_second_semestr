@@ -40,6 +40,9 @@ void TestNumbersOfVerticesMatrixOfEdges()
     std::unique_ptr<Graph> graph2 = MakeCompactGraph(7, edge_begin, edge_end);
     std::unique_ptr<Graph> graph3 = MakeCompactGraph(100, edge_begin, edge_end);
     std::unique_ptr<Graph> graph4 = MakeCompactGraph(1000, edge_begin, edge_end);
+    // @review: Из названия метода можно предположить. что тестируется MatrixOfEdges. Но при этом вызывается
+    // @review: функция MakeCompactGraph(). Это очень странно!
+    // @review: По идее, вы должены пользоваться конструктором тестируемого класса напрямую.
 
     if (graph1->GetNumberOfVertices() != 1)
         throw std::runtime_error("Error on TestNumbersOfVerticesListOfEdges");
@@ -66,7 +69,7 @@ void MatrixOfEdgesUnitTest()
     MemoryMonitor memory_monitor;
     TestEmptyGraphMatrixOfEdges();
     if (memory_monitor.CheckMemoryLeaks())
-        throw std::runtime_error("Memory leaks on ListOfEdgesUnitTest");
+        throw std::runtime_error("Memory leaks on ListOfEdgesUnitTest"); // @review: Текст сообщения определённо относился к другой функции.
 
     SmallUnitTestGraphMatrixOfEdges();
     if (memory_monitor.CheckMemoryLeaks())
