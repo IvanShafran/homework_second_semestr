@@ -66,24 +66,24 @@ void DFSRandomTest()
 
         switch (test % 5) {
         case 0: 
-            edges = GenEmptyGraphEdges(10, &unnecessary_number_of_edges);
-            graph = MakeCompactGraph(10, edges);
+            edges = GenEmptyGraphEdges(100, &unnecessary_number_of_edges);
+            graph = MakeCompactGraph(100, edges);
             break;
         case 1: 
-            edges = GenFullGraphEdges(5, &unnecessary_number_of_edges);
-            graph = MakeCompactGraph(5, edges);
+            edges = GenFullGraphEdges(50, &unnecessary_number_of_edges);
+            graph = MakeCompactGraph(50, edges);
             break;
         case 2: 
-            edges = GenAcyclicGraphEdges(20, &unnecessary_number_of_edges);
-            graph = MakeCompactGraph(20, edges);
+            edges = GenAcyclicGraphEdges(200, &unnecessary_number_of_edges);
+            graph = MakeCompactGraph(200, edges);
             break;
         case 3: 
-            edges = GenFunctionalGraphEdges(20, &unnecessary_number_of_edges);
-            graph = MakeCompactGraph(20, edges);
+            edges = GenFunctionalGraphEdges(200, &unnecessary_number_of_edges);
+            graph = MakeCompactGraph(200, edges);
             break;
         case 4: 
-            edges = GenRandomGraphEdges(20, &unnecessary_number_of_edges);
-            graph = MakeCompactGraph(20, edges);
+            edges = GenRandomGraphEdges(200, &unnecessary_number_of_edges);
+            graph = MakeCompactGraph(200, edges);
             break;
         }
 

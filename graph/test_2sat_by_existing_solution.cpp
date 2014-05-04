@@ -35,7 +35,7 @@ std::vector<bool> GenDisjunctsForExistingAndOneSolution(
 
 void Test2SatByExistingSolution()
 {
-    size_t number_of_tests = 1000;
+    size_t number_of_tests = 10000;
     size_t number_of_variables = 50;
     srand(777);
     for (size_t test = 0; test < number_of_tests; ++test)
