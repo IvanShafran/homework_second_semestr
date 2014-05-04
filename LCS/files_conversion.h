@@ -30,7 +30,7 @@ inline std::vector<size_t> Integrise(const std::vector<std::string>& strings,
     for (size_t i = 0; i < strings.size(); ++i)
     {
         if (string_map->find(strings[i]) == string_map->end()) {
-            (*string_map)[strings[i]] = string_map->size();
+            string_map->insert({strings[i], string_map->size()});
             string_storage->push_back(strings[i]);
         }
 
