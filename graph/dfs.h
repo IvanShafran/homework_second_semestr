@@ -2,34 +2,23 @@
 
 #include <vector>
 #include <stack>
-#include <memory>
 
 #include "graph.h"
 
 enum colors { WHITE, GREY, BLACK };
 
-class AbstractDFSUserClass
+class DFSVisitor
 {
 public:
-    virtual void BeforeProcessing(size_t vertex) = 0;
-    virtual void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color) = 0;
-    virtual void AfterProcessing(size_t vertex) = 0;
-};
+    virtual void BeforeProcessing(size_t vertex) {};
 
-class DefaultDFSUserClass : AbstractDFSUserClass {
-public:
-    void BeforeProcessing(size_t vertex)
-    {}
+    virtual void ProcessIncidenceVertex(size_t edge_begin, size_t edge_end, colors end_color) {};
 
-    void ProcessEdge(size_t edge_begin, size_t edge_end, colors end_color)
-    {}
-
-    void AfterProcessing(size_t vertex)
-    {}
+    virtual void AfterProcessing(size_t vertex) {};
 };
 
 template <class T>
-void DFSStep(const std::unique_ptr<Graph>& graph, T* user_class,
+void DFSStep(const Graph& graph, T* visitor,
     std::vector<colors>* color,
     std::vector<std::vector<size_t> >* incidence_lists, 
     std::vector<std::vector<size_t>::iterator >* incidence_iterator,
@@ -39,9 +28,9 @@ void DFSStep(const std::unique_ptr<Graph>& graph, T* user_class,
         size_t vertex = vertex_stack->top();
 
         if ((*color)[vertex] == WHITE) {
-            user_class->BeforeProcessing(vertex);
+            visitor->BeforeProcessing(vertex);
             
-            (*incidence_lists)[vertex] = graph->GetIncidenceList(vertex);
+            (*incidence_lists)[vertex] = graph.GetIncidenceList(vertex);
             (*incidence_iterator)[vertex] = (*incidence_lists)[vertex].begin();
             (*color)[vertex] = GREY;
         }
@@ -51,12 +40,13 @@ void DFSStep(const std::unique_ptr<Graph>& graph, T* user_class,
             (*incidence_lists)[vertex].resize(0);
             (*color)[vertex] = BLACK;
 
-            user_class->AfterProcessing(vertex);
+            visitor->AfterProcessing(vertex);
         }
         else {
             size_t incidence_vertex = *((*incidence_iterator)[vertex]);
 
-            user_class->ProcessEdge(vertex, incidence_vertex, (*color)[incidence_vertex]);
+            visitor->ProcessIncidenceVertex(vertex, incidence_vertex, 
+                (*color)[incidence_vertex]);
 
             if ((*color)[incidence_vertex] == WHITE) {
                 vertex_stack->push(incidence_vertex);
@@ -67,26 +57,25 @@ void DFSStep(const std::unique_ptr<Graph>& graph, T* user_class,
     }
 }
 
-template <class T = DefaultDFSUserClass>
-void DFS(const std::unique_ptr<Graph>& graph, T* user_class = &DefaultDFSUserClass())
+template <class T = DFSVisitor>
+void DFS(const Graph& graph, T* visitor = &DFSVisitor())
 {
-    size_t number_of_vertices = graph->GetNumberOfVertices();
+    size_t number_of_vertices = graph.GetNumberOfVertices();
     
     std::vector<colors> color(number_of_vertices, WHITE);
 
     std::vector<std::vector<size_t> > incidence_lists;
     incidence_lists.resize(number_of_vertices);
 
-    std::vector<std::vector<size_t>::iterator > incidence_iterator;    
+    std::vector<std::vector<size_t>::iterator > incidence_iterator;
     incidence_iterator.resize(number_of_vertices);
 
     std::stack<size_t> vertex_stack;
 
-    for (size_t start_vertex = 0; start_vertex < number_of_vertices;
-        ++start_vertex) 
+    for (size_t start_vertex = 0; start_vertex < number_of_vertices; ++start_vertex)
     if (color[start_vertex] == WHITE) {
-        vertex_stack.push(start_vertex);        
-        DFSStep(graph, user_class, &color, &incidence_lists, &incidence_iterator,
+        vertex_stack.push(start_vertex);
+        DFSStep(graph, visitor, &color, &incidence_lists, &incidence_iterator,
             &vertex_stack);
     }
 }

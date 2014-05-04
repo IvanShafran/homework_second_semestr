@@ -25,7 +25,7 @@ void GraphTimeTest(size_t max_number_of_vertices, size_t number_step,
         std::unique_ptr<Graph> graph = GetGraph(number_of_vertices, &number_of_edges);
 
         int time_before_DFS = GetTickCount();
-        DFS(graph);
+        DFS(*graph);
         int time_after_DFS = GetTickCount();
 
         graph_time_test_log << "Time used by DFS on " + graph_type

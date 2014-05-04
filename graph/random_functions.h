@@ -4,11 +4,17 @@
 #include <stdexcept>
 #include <fstream>
 
-inline int Rand(int begin, int end)
+template <class T>
+T Rand(T begin, T end)
 {
     if (begin >= end)
         throw std::range_error("Rand(): begin >= end");
     return begin + (rand() % (end - begin));
+}
+
+inline bool RandBool()
+{
+    return Rand(0, 2) == 1;
 }
 
 template <class Sequence>
@@ -19,8 +25,8 @@ Sequence RandSequence(size_t size, const Sequence& element_set)
 
     Sequence result;
     result.resize(size);
-    for (int i = 0; i < size; i++)
-        result[](element_set[Rand(0, element_set.size())]);
+    for (size_t i = 0; i < size; i++)
+        result[i] = element_set[Rand<size_t>(0, element_set.size())];
 
     return result;
 }

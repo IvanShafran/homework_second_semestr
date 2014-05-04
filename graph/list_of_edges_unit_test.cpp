@@ -6,8 +6,8 @@
 
 void TestEmptyGraphListOfEdges()
 {
-    std::vector<size_t> edge_begin, edge_end;
-    std::unique_ptr<Graph> empty_graph = MakeCompactGraph(1, edge_begin, edge_end);
+    std::vector<Edge> edges;
+    std::unique_ptr<Graph> empty_graph(new ListOfEdges(1, edges));
 
     if (empty_graph->GetNumberOfVertices() != 1)
         throw std::runtime_error("Error on TestEmptyGraphListOfEdges: wrong number of vertices");
@@ -19,9 +19,8 @@ void TestEmptyGraphListOfEdges()
 
 void SmallUnitTestGraphListOfEdges()
 {
-    std::vector<size_t> edge_begin = { 0, 1, 2, 2, 3, 4 };
-    std::vector<size_t> edge_end = { 1, 2, 0, 3, 4, 2 };
-    std::unique_ptr<Graph> graph = MakeCompactGraph(5, edge_begin, edge_end);
+    std::vector<Edge> edges = { { 0, 1 }, { 1, 2 }, { 2, 0 }, { 2, 3 }, { 3, 4 }, { 4, 2 } };
+    std::unique_ptr<Graph> graph(new ListOfEdges(5, edges));
 
     if (graph->GetNumberOfVertices() != 5)
         throw std::runtime_error("Error on SmallUnitTestGraphListOfEdges: wrong number of vertices");
@@ -30,16 +29,16 @@ void SmallUnitTestGraphListOfEdges()
         throw std::runtime_error("Error on SmallUnitTestGraphListOfEdges: wrong incidence list");
 
     if (graph->GetIncidenceList(2)[0] != 0 || graph->GetIncidenceList(2)[1] != 3)
-        throw std::runtime_error("Error on SmallUnitTestGraph: wrong incidence list"); 
+        throw std::runtime_error("Error on SmallUnitTestGraphListOfEdges: wrong incidence list"); 
 }
 
 void TestNumbersOfVerticesListOfEdges()
 {
-    std::vector<size_t> edge_begin, edge_end;
-    std::unique_ptr<Graph> graph1 = MakeCompactGraph(1, edge_begin, edge_end);
-    std::unique_ptr<Graph> graph2 = MakeCompactGraph(7, edge_begin, edge_end);
-    std::unique_ptr<Graph> graph3 = MakeCompactGraph(100, edge_begin, edge_end);
-    std::unique_ptr<Graph> graph4 = MakeCompactGraph(1000, edge_begin, edge_end);
+    std::vector<Edge> edges;
+    std::unique_ptr<Graph> graph1(new ListOfEdges(1, edges));
+    std::unique_ptr<Graph> graph2(new ListOfEdges(7, edges));
+    std::unique_ptr<Graph> graph3(new ListOfEdges(100, edges));
+    std::unique_ptr<Graph> graph4(new ListOfEdges(1000, edges));
 
     if (graph1->GetNumberOfVertices() != 1)
         throw std::runtime_error("Error on TestNumbersOfVerticesListOfEdges");
@@ -53,8 +52,9 @@ void TestNumbersOfVerticesListOfEdges()
 
 void TestIncidenceListListOfEdges()
 {
-    std::vector<size_t> edge_begin = {0, 0, 0, 0, 0}, edge_end = {1, 2, 3, 4, 5};
-    std::unique_ptr<Graph> graph = MakeCompactGraph(6, edge_begin, edge_end);
+    std::vector<Edge> edges = { { 0, 1 }, { 0, 2 }, { 0, 3 }, 
+        { 0, 4 }, { 0, 5 } };
+    std::unique_ptr<Graph> graph(new ListOfEdges(6, edges));
 
     if (graph->GetIncidenceList(0) != std::vector<size_t>({ 1, 2, 3, 4, 5 }))
         throw std::runtime_error("Error on TestIncidenceListListOfEdges");

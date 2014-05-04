@@ -2,21 +2,20 @@
 
 #include <queue>
 #include <vector>
-#include <memory>
 
 #include "graph.h"
 
 namespace {
 
-    std::vector<int> BFS(const std::unique_ptr<Graph>& graph, size_t vertex)
+    std::vector<int> BFS(const Graph& graph, size_t vertex)
     {
-        std::vector<bool> used(graph->GetNumberOfVertices(), false);
+        std::vector<bool> used(graph.GetNumberOfVertices(), false);
         used[vertex] = true;
 
         std::queue<size_t> queue;
         queue.push(vertex);
 
-        std::vector<int> distance(graph->GetNumberOfVertices(), -1);
+        std::vector<int> distance(graph.GetNumberOfVertices(), -1);
         distance[vertex] = 0;
 
         while (!queue.empty()) {
@@ -24,7 +23,7 @@ namespace {
             queue.pop();
             used[current_vertex] = true;
 
-            std::vector<size_t> incidence_list = graph->GetIncidenceList(current_vertex);
+            std::vector<size_t> incidence_list = graph.GetIncidenceList(current_vertex);
 
             for (size_t incidence_vertex_index = 0; incidence_vertex_index < incidence_list.size();
                 ++incidence_vertex_index) {
