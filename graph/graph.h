@@ -62,9 +62,10 @@ namespace {
 
         static size_t ByteSize(size_t number_of_vertices, const std::vector<Edge>& edges)
         {
-            //list_memory = 3 * number_of_edges, where 3 is experimental constant
+            //multiplication by 2, because vector can reserve (2 * size) memory
             size_t number_of_edges = edges.size();
-            return 3 * number_of_edges;
+            return 2 * (sizeof(size_t) * number_of_edges) + 
+                number_of_vertices * sizeof(std::vector<size_t>(0));
         }
     };
 
@@ -103,9 +104,9 @@ namespace {
 
         static size_t ByteSize(size_t number_of_vertices, const std::vector<Edge>& edges)
         {
-            //matrix_memory without multiplication by 2, because we use vector.resize()
             //division by 8, because vector<bool> uses bit optimization
-            return number_of_vertices * number_of_vertices / 8;
+            return (sizeof(bool) * number_of_vertices * number_of_vertices) / 8 + 
+                number_of_vertices * sizeof(std::vector<bool>(0));
         }
     };
 
@@ -113,7 +114,6 @@ namespace {
         const std::vector<Edge>& edges)
     {
         Graph* graph;
-        size_t numbers_of_edges = edges.size();
         if (ListOfEdges::ByteSize(number_of_vertices, edges) < 
             MatrixOfEdges::ByteSize(number_of_vertices, edges))
             graph = new ListOfEdges(number_of_vertices, edges);
