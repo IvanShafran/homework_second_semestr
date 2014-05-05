@@ -34,9 +34,13 @@ void TestMakeCompactGraph(size_t max_number_of_vertices, size_t number_step,
             new MatrixOfEdges(number_of_vertices, edges));
         size_t matrix_memory = matrix_memory_monitor.GetDifference();
         
-        if (compact_graph_memory > 2 * list_memory || compact_graph_memory > 2 * matrix_memory)
+        double reliability = 1.5;//experimental constant
+        if ((compact_graph_memory > reliability * list_memory || 
+            compact_graph_memory > reliability * matrix_memory) &&
+            (2 * compact_graph_memory - list_memory - matrix_memory) > (1 << 5))
             throw std::runtime_error("Error on TestMakeCompactGraph(" + graph_type 
-            + "): graph is not compact more than twice");
+            + "): graph is not compact more than " + std::to_string(reliability) + " times "
+                + "and more than 2^5 bytes");
     }
 }
 
@@ -44,8 +48,8 @@ void TestMakeCompactGraph()
 {
     srand(777);
     TestMakeCompactGraph(200, 20, GenFullGraphEdges, "full graph");
-    TestMakeCompactGraph(100, 20, GenEmptyGraphEdges, "empty graph");
-    TestMakeCompactGraph(300, 20, GenFunctionalGraphEdges, "functional graph");
-    TestMakeCompactGraph(300, 20, GenAcyclicGraphEdges, "acycic graph");
-    TestMakeCompactGraph(300, 20, GenRandomGraphEdges, "random graph");
+    TestMakeCompactGraph(10000, 1000, GenEmptyGraphEdges, "empty graph");
+    TestMakeCompactGraph(10000, 1000, GenFunctionalGraphEdges, "functional graph");
+    TestMakeCompactGraph(10000, 1000, GenAcyclicGraphEdges, "acycic graph");
+    TestMakeCompactGraph(10000, 1000, GenRandomGraphEdges, "random graph");
 }
